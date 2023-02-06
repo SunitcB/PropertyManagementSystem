@@ -1,0 +1,8 @@
+---
+keycloak:
+  realm: projectrealm
+  auth-server-url: http://localhost:8080
+  resource: projectclient
+  use-resource-role-mappings: true
+  credentials:
+    secret: QAt6PkFh4PuMcseJbkR1kxbb9zf1zldN
