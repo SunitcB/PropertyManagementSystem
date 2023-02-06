@@ -1,19 +1,40 @@
 package com.miu.waafinalproject.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
+    String email;
+    String firstName;
+    String lastName;
+    String middleName;
+    String address;
+    String phone;
+    String password;
+    @OneToMany
+    @JsonManagedReference
+    List<Role> roles;
+    String username;
+
+    @OneToMany(mappedBy = "users")
+    @JsonManagedReference
+    List<Favorite> favorites;
+    @OneToMany(mappedBy = "users")
+    @JsonManagedReference
+    List<PropertyApplication> propertyApplications;
+    @OneToMany(mappedBy = "owner")
+    @JsonManagedReference
+    List<Property> properties;
 }

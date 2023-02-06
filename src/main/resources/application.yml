@@ -1,8 +1,46 @@
----
-keycloak:
-  realm: projectrealm
-  auth-server-url: http://localhost:8080
-  resource: projectclient
-  use-resource-role-mappings: true
-  credentials:
-    secret: QAt6PkFh4PuMcseJbkR1kxbb9zf1zldN
+#spring:
+#  application:
+#    name: spring-data-demo-1
+#  datasource:
+#    password: postgrespw
+#    url: jdbc:postgresql://localhost:32768/postgres
+#    username: postgres
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#    show-sql: true
+#    defer-datasource-initialization: true
+#    generate-ddl: true
+#  sql:
+#     init:
+#      mode: always
+#server:
+#  port: 8090
+
+
+spring:
+  application:
+    name: property-management-system
+  datasource:
+    password: 'Jersey@2023'
+    url: jdbc:mysql://localhost:3306/manage_property
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+  sql:
+    init:
+      mode: always
+server:
+  port: 8090

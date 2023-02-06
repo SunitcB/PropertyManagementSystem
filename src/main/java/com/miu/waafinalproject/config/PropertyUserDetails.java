@@ -1,14 +1,21 @@
 package com.miu.waafinalproject.config;
 
+import com.miu.waafinalproject.domain.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PropertyUserDetails implements UserDetails {
+    String username;
+    String password;
+    List<Role> roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.roles.stream().map(x -> new SimpleGrantedAuthority(x.getRoleName())).collect(Collectors.toList());
     }
 
     @Override
