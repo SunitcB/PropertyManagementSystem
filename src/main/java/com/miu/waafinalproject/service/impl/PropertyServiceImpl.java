@@ -108,6 +108,8 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAddress(addressRepo.save(address));
         property.setPrice(requestModel.getPrice());
         property.setBuiltYear(requestModel.getBuiltYear());
+        property.setPropertyOption(propertyOptionRepo.findByType(requestModel.getPropertyOption()));
+        property.setPropertyType(propertyTypeRepo.findByName(requestModel.getPropertyType()));
 //        property.setOwner(usersRepo.findById(requestModel.getOwnerId()).get());
         propertyRepo.save(property);
         responseModel.setStatus(HttpStatus.OK);

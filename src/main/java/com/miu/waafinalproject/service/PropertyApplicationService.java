@@ -10,4 +10,5 @@ public interface PropertyApplicationService {
     ResponseModel saveOffer(PropertyApplicationRequestModel applicationModel);
     ResponseModel deleteOffer(Long applicationId);
     ResponseModel updateOffer(Long id, PropertyApplicationRequestModel applicationModel);
+    ResponseModel getAllOfMyOffers();
 }

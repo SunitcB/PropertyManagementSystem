@@ -51,6 +51,24 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     }
 
     @Override
+    public ResponseModel getAllOfMyOffers() {
+        responseModel = new ResponseModel();
+        List<PropertyApplicationResponseModel> responseObj = new ArrayList<>();
+        applicationRepo.findAllByUsers_Id(userService.getLoggedInUser().getId()).forEach(app->
+                responseObj.add(new PropertyApplicationResponseModel(
+                        app.getId(),
+                        app.getStatus(),
+                        app.getRemarks(),
+                        app.getOfferPrice(),
+                        app.getUsers().getUserFullName()
+                ))
+        );
+        responseModel.setData(responseObj);
+        responseModel.setStatus(HttpStatus.OK);
+        return responseModel;
+    }
+
+    @Override
     public ResponseModel saveOffer(PropertyApplicationRequestModel applicationModel) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);

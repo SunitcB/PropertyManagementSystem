@@ -23,6 +23,12 @@ public class ApplicationController {
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
+    @GetMapping("/myApplication")
+    public ResponseEntity<ResponseModel> getAllMyApplications() {
+        responseModel = propertyApplicationService.getAllOfMyOffers();
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponseModel> getPropertyApplication(@PathVariable Long id) {
 //        responseModel = propertyApplicationService.getAllOffersToProperty(id);

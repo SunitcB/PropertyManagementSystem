@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface PropertyApplicationRepo extends CrudRepository<PropertyApplication, Long> {
     List<PropertyApplication> findAllByProperty_Id(UUID uuid);
+    List<PropertyApplication> findAllByUsers_Id(Long id);
 }
