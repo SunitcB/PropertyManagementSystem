@@ -19,4 +19,5 @@ public class PropertyResponseModel {
     Short propertyViewCount;
     String image;
     Integer builtYear;
+    String propertyStatus;
 }

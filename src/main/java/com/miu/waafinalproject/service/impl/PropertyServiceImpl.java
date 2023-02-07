@@ -10,7 +10,9 @@ import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyResponseModel;
 import com.miu.waafinalproject.repository.*;
 import com.miu.waafinalproject.service.PropertyService;
+import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
+import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyTypeRepo propertyTypeRepo;
     private ResponseModel responseModel;
     private final UsersRepo usersRepo;
+    private final UserService userService;
 
     private final PropertyImageUtil imageUtil;
 
@@ -86,7 +89,8 @@ public class PropertyServiceImpl implements PropertyService {
                     property.getAddress(),
                     (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
                     imageUtil.imageToBase64(),
-                    property.getBuiltYear()));
+                    property.getBuiltYear(),
+                    property.getPropertyStatus()));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -102,15 +106,14 @@ public class PropertyServiceImpl implements PropertyService {
         property.setTitle(requestModel.getTitle());
         PropertyDetail propertyDetail = new PropertyDetail(null, requestModel.getDescription(), requestModel.getBed(), requestModel.getBath(), requestModel.getHasBasement(), requestModel.getHasParking(), requestModel.getArea(), requestModel.getFeatures());
         property.setPropertyDetail(propertyDetailRepo.save(propertyDetail));
-//        property.setPropertyOption(propertyOptionRepo.findById(1L).get());
-//        property.setPropertyType(propertyTypeRepo.findById(2L).get());
         Address address = new Address(null, requestModel.getStreet(), requestModel.getCity(), requestModel.getState(), requestModel.getZipcode());
         property.setAddress(addressRepo.save(address));
         property.setPrice(requestModel.getPrice());
         property.setBuiltYear(requestModel.getBuiltYear());
         property.setPropertyOption(propertyOptionRepo.findByType(requestModel.getPropertyOption()));
         property.setPropertyType(propertyTypeRepo.findByName(requestModel.getPropertyType()));
-//        property.setOwner(usersRepo.findById(requestModel.getOwnerId()).get());
+        property.setOwner(userService.getLoggedInUser());
+        property.setPropertyStatus(requestModel.getPropertyStatus());
         propertyRepo.save(property);
         responseModel.setStatus(HttpStatus.OK);
         responseModel.setMessage("Property has been saved successfully.");
@@ -127,11 +130,13 @@ public class PropertyServiceImpl implements PropertyService {
         property.setTitle(requestModel.getTitle());
         PropertyDetail propertyDetail = new PropertyDetail(null, requestModel.getDescription(), requestModel.getBed(), requestModel.getBath(), requestModel.getHasBasement(), requestModel.getHasParking(), requestModel.getArea(), requestModel.getFeatures());
         property.setPropertyDetail(propertyDetailRepo.save(propertyDetail));
-        property.setPropertyOption(propertyOptionRepo.findById(1L).get());
-        property.setPropertyType(propertyTypeRepo.findById(2L).get());
         Address address = new Address(null, requestModel.getStreet(), requestModel.getCity(), requestModel.getState(), requestModel.getZipcode());
         property.setAddress(addressRepo.save(address));
-        property.setOwner(usersRepo.findById(requestModel.getOwnerId()).get());
+        property.setPrice(requestModel.getPrice());
+        property.setBuiltYear(requestModel.getBuiltYear());
+        property.setPropertyOption(propertyOptionRepo.findByType(requestModel.getPropertyOption()));
+        property.setPropertyType(propertyTypeRepo.findByName(requestModel.getPropertyType()));
+        property.setPropertyStatus(requestModel.getPropertyStatus());
         propertyRepo.save(property);
         responseModel.setMessage("Property has been updated successfully.");
         return responseModel;
@@ -140,9 +145,15 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public ResponseModel delete(UUID id) {
         responseModel = new ResponseModel();
-        responseModel.setStatus(HttpStatus.OK);
-        propertyRepo.deleteById(id);
-        responseModel.setMessage("Property has been deleted successfully.");
+        Property propertyObj = propertyRepo.findById(id).get();
+        if (propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING)) {
+            responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
+            responseModel.setMessage("Property has pending status so cannot be deleted.");
+        } else {
+            responseModel.setStatus(HttpStatus.OK);
+            propertyRepo.deleteById(id);
+            responseModel.setMessage("Property has been deleted successfully.");
+        }
         return responseModel;
     }
 }

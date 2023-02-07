@@ -8,6 +8,7 @@ import com.miu.waafinalproject.repository.PropertyApplicationRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.PropertyApplicationService;
 import com.miu.waafinalproject.service.UserService;
+import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     public ResponseModel getAllOfMyOffers() {
         responseModel = new ResponseModel();
         List<PropertyApplicationResponseModel> responseObj = new ArrayList<>();
-        applicationRepo.findAllByUsers_Id(userService.getLoggedInUser().getId()).forEach(app->
+        applicationRepo.findAllByUsers_Id(userService.getLoggedInUser().getId()).forEach(app ->
                 responseObj.add(new PropertyApplicationResponseModel(
                         app.getId(),
                         app.getStatus(),
@@ -74,7 +75,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
         responseModel.setStatus(HttpStatus.OK);
         PropertyApplication application = new PropertyApplication();
         application.setProperty(propertyRepo.findById(applicationModel.getPropertyId()).get());
-        application.setStatus(applicationModel.getStatus());
+        application.setStatus(PropertyApplicationStatus.PENDING.toString());
         application.setRemarks(applicationModel.getRemarks());
         application.setOfferPrice(applicationModel.getOfferPrice());
         application.setUsers(userService.getLoggedInUser());

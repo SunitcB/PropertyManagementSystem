@@ -24,4 +24,5 @@ public class PropertyRequestModel {
     Integer zipcode;
     Long ownerId;
     Double price;
+    String propertyStatus = "PENDING";
 }

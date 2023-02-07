@@ -26,6 +26,7 @@ public class Property {
     String title;
     Double price;
     Integer builtYear;
+    String propertyStatus;
     @OneToOne
     PropertyDetail propertyDetail;
     @OneToOne
