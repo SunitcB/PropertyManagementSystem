@@ -26,9 +26,9 @@ spring:
   application:
     name: property-management-system
   datasource:
-    password: 'Jersey@2023'
+    password: 'guest'
     url: jdbc:mysql://localhost:3306/manage_property
-    username: root
+    username: guest
   jpa:
     hibernate:
       ddl-auto: update
