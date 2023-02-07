@@ -12,6 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/application")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApplicationController {
     ResponseModel responseModel;
     private final PropertyApplicationService propertyApplicationService;

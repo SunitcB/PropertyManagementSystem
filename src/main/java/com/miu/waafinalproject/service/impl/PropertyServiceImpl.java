@@ -10,12 +10,14 @@ import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyResponseModel;
 import com.miu.waafinalproject.repository.*;
 import com.miu.waafinalproject.service.PropertyService;
+import com.miu.waafinalproject.utils.PropertyImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +34,8 @@ public class PropertyServiceImpl implements PropertyService {
     private ResponseModel responseModel;
     private final UsersRepo usersRepo;
 
+    private final PropertyImageUtil imageUtil;
+
     @Override
     public ResponseModel getAll(Object filters) {
         responseModel = new ResponseModel();
@@ -39,19 +43,26 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         propertyRepo.findAll(Sort.by("title")).forEach(x -> {
-            responseObj.add(
-                    new PropertyListResponseModel(
-                            x.getId(),
-                            x.getTitle(),
-                            x.getPropertyDetail().getDescription(),
-                            299999d,
-                            new AddressResponseModel(x.getAddress()).toString(),
-                            null,
-                            x.getPropertyOption().getType(),
-                            x.getPropertyDetail().getBed(),
-                            x.getPropertyDetail().getBath()
-                    ));
+
+            try {
+                responseObj.add(
+                        new PropertyListResponseModel(
+                                x.getId(),
+                                x.getTitle(),
+                                x.getPropertyDetail().getDescription(),
+                                299999d,
+                                new AddressResponseModel(x.getAddress()).toString(),
+                                imageUtil.imageToBase64(),
+                                x.getPropertyOption().getType(),
+                                x.getPropertyDetail().getBed(),
+                                x.getPropertyDetail().getBath()
+                        ));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         });
+
         responseModel.setData(responseObj);
         return responseModel;
     }
