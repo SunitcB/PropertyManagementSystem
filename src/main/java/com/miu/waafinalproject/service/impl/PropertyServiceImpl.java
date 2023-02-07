@@ -1,6 +1,8 @@
 package com.miu.waafinalproject.service.impl;
 
-import com.miu.waafinalproject.domain.*;
+import com.miu.waafinalproject.domain.Address;
+import com.miu.waafinalproject.domain.Property;
+import com.miu.waafinalproject.domain.PropertyDetail;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyRequestModel;
 import com.miu.waafinalproject.model.responseDTO.AddressResponseModel;
@@ -37,7 +39,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         propertyRepo.findAll(Sort.by("title")).forEach(x -> {
-            responseObj.add(new PropertyListResponseModel(x.getId(), x.getTitle(), x.getPropertyDetail().getDescription(), new AddressResponseModel(x.getAddress()).toString()));
+            responseObj.add(new PropertyListResponseModel(x.getId(), x.getTitle(), x.getPropertyDetail().getDescription(), 299999d, new AddressResponseModel(x.getAddress()).toString(), null));
         });
         responseModel.setData(responseObj);
         return responseModel;
@@ -55,9 +57,11 @@ public class PropertyServiceImpl implements PropertyService {
                 property.getTitle(),
                 property.getPropertyDetail(),
                 (property.getPropertyOption() != null) ? property.getPropertyOption().getType() : null,
+                299999d,
                 (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
                 property.getAddress(),
-                (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0));
+                (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
+                null));
         return responseModel;
     }
 
@@ -81,12 +85,12 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public ResponseModel update(PropertyRequestModel requestModel) {
+    public ResponseModel update(UUID id, PropertyRequestModel requestModel) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
         Property property = new Property();
 
-        property.setId(propertyRepo.findById(requestModel.getId()).get().getId());
+        property.setId(id);
         property.setTitle(requestModel.getTitle());
         PropertyDetail propertyDetail = new PropertyDetail(null, requestModel.getDescription(), requestModel.getBed(), requestModel.getBath(), requestModel.getHasBasement(), requestModel.getHasParking(), requestModel.getArea(), requestModel.getFeatures());
         property.setPropertyDetail(propertyDetailRepo.save(propertyDetail));

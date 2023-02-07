@@ -10,5 +10,7 @@ public class PropertyListResponseModel {
     UUID id;
     String title;
     String description;
+    Double price;
     String address;
+    String image;
 }

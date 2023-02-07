@@ -13,7 +13,9 @@ public class PropertyResponseModel {
     String title;
     PropertyDetail propertyDetail;
     String propertyOption;
+    Double price;
     String propertyType;
     Address address;
     Short propertyViewCount;
+    String image;
 }

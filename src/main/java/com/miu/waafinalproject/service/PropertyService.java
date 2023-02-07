@@ -9,6 +9,6 @@ public interface PropertyService {
     ResponseModel getAll(Object filters);
     ResponseModel getById(UUID id);
     ResponseModel save(PropertyRequestModel requestModel);
-    ResponseModel update(PropertyRequestModel requestModel);
+    ResponseModel update(UUID id, PropertyRequestModel requestModel);
     ResponseModel delete(UUID id);
 }

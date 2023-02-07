@@ -20,4 +20,7 @@ public class PropertyApplication {
     @ManyToOne
     @JsonBackReference
     Users users;
+    @ManyToOne
+    @JsonBackReference
+    Property property;
 }

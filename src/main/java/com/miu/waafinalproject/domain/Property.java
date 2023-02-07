@@ -37,6 +37,9 @@ public class Property {
     @OneToMany
     @JsonManagedReference
     List<Favorite> favorites;
+    @OneToMany(mappedBy = "property")
+    @JsonManagedReference
+    List<PropertyApplication> applications;
     @OneToOne
     Assets assets;
     @ManyToOne

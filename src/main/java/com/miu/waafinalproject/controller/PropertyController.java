@@ -40,7 +40,7 @@ public class PropertyController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseModel> updateProperty(@PathVariable UUID id, @RequestBody PropertyRequestModel requestModel) {
-        responseModel = propertyService.update(requestModel);
+        responseModel = propertyService.update(id, requestModel);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 

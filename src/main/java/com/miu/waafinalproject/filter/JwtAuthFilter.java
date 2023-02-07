@@ -19,8 +19,8 @@ import java.io.IOException;
 @Configuration
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private JwtUtil jwtUtil;
-    private PropertyUserDetailService propertyUserDetailService;
+    private final JwtUtil jwtUtil;
+    private final PropertyUserDetailService propertyUserDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -32,14 +32,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             token = authorizationHeader.replace("Bearer ", "");
             try {
                 username = jwtUtil.getUsernameFromToken(token);
-            } catch (ExpiredJwtException e) { // TODO come back here!
+            } catch (ExpiredJwtException e) {
                 e.getMessage();
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = propertyUserDetailService.loadUserByUsername(username);
-            boolean isTokenValid = jwtUtil.validateToken(token);
+            boolean isTokenValid = jwtUtil.validateToken(token, userDetails);
             if (isTokenValid) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

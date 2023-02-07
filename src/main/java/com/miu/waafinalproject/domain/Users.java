@@ -23,7 +23,7 @@ public class Users {
     String address;
     String phone;
     String password;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonManagedReference
     List<Role> roles;
     String username;
@@ -37,4 +37,8 @@ public class Users {
     @OneToMany(mappedBy = "owner")
     @JsonManagedReference
     List<Property> properties;
+
+    public String getUserFullName() {
+        return (this.firstName + " " + ((this.middleName != null) ? this.middleName : "") + " " + this.lastName);
+    }
 }
