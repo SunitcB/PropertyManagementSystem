@@ -23,4 +23,5 @@ public class PropertyRequestModel {
     String state;
     Integer zipcode;
     Long ownerId;
+    Double price;
 }
