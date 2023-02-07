@@ -13,4 +13,7 @@ public class PropertyListResponseModel {
     Double price;
     String address;
     String image;
+    String propertyOption;
+    Short bed;
+    Short bath;
 }

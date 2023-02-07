@@ -39,7 +39,18 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         propertyRepo.findAll(Sort.by("title")).forEach(x -> {
-            responseObj.add(new PropertyListResponseModel(x.getId(), x.getTitle(), x.getPropertyDetail().getDescription(), 299999d, new AddressResponseModel(x.getAddress()).toString(), null));
+            responseObj.add(
+                    new PropertyListResponseModel(
+                            x.getId(),
+                            x.getTitle(),
+                            x.getPropertyDetail().getDescription(),
+                            299999d,
+                            new AddressResponseModel(x.getAddress()).toString(),
+                            null,
+                            x.getPropertyOption().getType(),
+                            x.getPropertyDetail().getBed(),
+                            x.getPropertyDetail().getBath()
+                    ));
         });
         responseModel.setData(responseObj);
         return responseModel;
