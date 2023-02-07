@@ -16,4 +16,5 @@ public class PropertyListResponseModel {
     String propertyOption;
     Short bed;
     Short bath;
+    Integer builtYear;
 }

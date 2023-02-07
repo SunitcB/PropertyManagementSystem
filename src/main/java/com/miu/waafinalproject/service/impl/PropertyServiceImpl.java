@@ -50,12 +50,13 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getId(),
                                 x.getTitle(),
                                 x.getPropertyDetail().getDescription(),
-                                299999d,
+                                x.getPrice(),
                                 new AddressResponseModel(x.getAddress()).toString(),
                                 imageUtil.imageToBase64(),
                                 x.getPropertyOption().getType(),
                                 x.getPropertyDetail().getBed(),
-                                x.getPropertyDetail().getBath()
+                                x.getPropertyDetail().getBath(),
+                                x.getBuiltYear()
                         ));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -74,16 +75,22 @@ public class PropertyServiceImpl implements PropertyService {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
         Property property = propertyRepo.findById(id).get();
-        responseModel.setData(new PropertyResponseModel(
-                property.getId(),
-                property.getTitle(),
-                property.getPropertyDetail(),
-                (property.getPropertyOption() != null) ? property.getPropertyOption().getType() : null,
-                299999d,
-                (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
-                property.getAddress(),
-                (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
-                null));
+        try {
+            responseModel.setData(new PropertyResponseModel(
+                    property.getId(),
+                    property.getTitle(),
+                    property.getPropertyDetail(),
+                    (property.getPropertyOption() != null) ? property.getPropertyOption().getType() : null,
+                    property.getPrice(),
+                    (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
+                    property.getAddress(),
+                    (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
+                    imageUtil.imageToBase64(),
+                    property.getBuiltYear()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         return responseModel;
     }
 

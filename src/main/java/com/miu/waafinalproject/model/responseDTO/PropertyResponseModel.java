@@ -18,4 +18,5 @@ public class PropertyResponseModel {
     Address address;
     Short propertyViewCount;
     String image;
+    Integer builtYear;
 }

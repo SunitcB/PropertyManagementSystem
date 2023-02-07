@@ -24,6 +24,8 @@ public class Property {
 //    @UuidGenerator
 //    UUID uuid;
     String title;
+    Double price;
+    Integer builtYear;
     @OneToOne
     PropertyDetail propertyDetail;
     @OneToOne

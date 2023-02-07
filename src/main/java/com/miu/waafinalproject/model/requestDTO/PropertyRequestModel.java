@@ -11,6 +11,7 @@ public class PropertyRequestModel {
     String description;
     Short bed;
     Short bath;
+    Integer builtYear;
     Boolean hasBasement;
     Boolean hasParking;
     Float area;
