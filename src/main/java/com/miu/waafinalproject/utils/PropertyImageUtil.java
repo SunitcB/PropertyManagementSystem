@@ -16,7 +16,7 @@ public class PropertyImageUtil {
 
     public String imageToBase64() throws IOException {
         String absolutePath = context.getRealPath("resources/static");
-        byte[] fileContent = FileUtils.readFileToByteArray(new File(absolutePath, "img"));
+        byte[] fileContent = FileUtils.readFileToByteArray(new File("/Users/mannsu/Projects/WAAFinalProject/src/main/resources/static/img.jpg"));
         return Base64.getEncoder().encodeToString(fileContent);
     }
 }
