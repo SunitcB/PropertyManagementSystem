@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
                         userObj.getMiddleName(),
                         userObj.getAddress(),
                         userObj.getPhone(),
-                        userObj.getRoles(),
+                        userObj.getRoles().stream().findFirst().get().getRoleName(),
                         userObj.getUsername()
                 )
         );
