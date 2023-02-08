@@ -73,7 +73,6 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyDetail().getBath(),
                                 x.getBuiltYear(),
                                 x.getPropertyStatus(),
-                                userService.hasToken() ? false : favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null,
                                 x.getPropertyView().stream().count()
                         ));
             } catch (IOException e) {
