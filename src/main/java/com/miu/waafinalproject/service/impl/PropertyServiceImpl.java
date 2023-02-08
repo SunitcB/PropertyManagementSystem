@@ -60,7 +60,7 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyDetail().getBath(),
                                 x.getBuiltYear(),
                                 x.getPropertyStatus(),
-                                favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null,
+                                userService.hasToken() ? false : favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null,
                                 x.getPropertyView().stream().count()
                         ));
             } catch (IOException e) {
@@ -75,8 +75,6 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public ResponseModel getById(UUID id) {
-        System.out.println("DASAD");
-        System.out.println(id);
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
         Property property = propertyRepo.findById(id).get();
@@ -93,7 +91,7 @@ public class PropertyServiceImpl implements PropertyService {
                     imageUtil.imageToBase64(),
                     property.getBuiltYear(),
                     property.getPropertyStatus(),
-                    favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));
+                    userService.hasToken() ? false : favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -39,6 +39,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean hasToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getPrincipal().equals("anonymousUser");
+    }
+
+    @Override
     public boolean checkIfCurrentUserHasRole(String roleName) {
         System.out.println("USER ROLES ========================>");
         System.out.println(getLoggedInUser().getRoles().stream().findFirst().get().getRoleName());

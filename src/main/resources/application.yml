@@ -42,5 +42,16 @@ spring:
   sql:
     init:
       mode: always
+  mail:
+    host: smtp.gmail.com
+    port: 25
+    username: waa.srna@gmail.com
+    password: "waajan2023"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8090

@@ -53,4 +53,9 @@ public class ApplicationController {
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseModel> acceptOffer(@PathVariable Long id) {
+        responseModel = propertyApplicationService.acceptOffer(id);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
 }

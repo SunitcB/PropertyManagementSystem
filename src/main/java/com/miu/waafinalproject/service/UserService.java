@@ -6,6 +6,7 @@ import com.miu.waafinalproject.model.requestDTO.UserRequestModel;
 
 public interface UserService {
     Users getLoggedInUser();
+    boolean hasToken();
     boolean checkIfCurrentUserHasRole(String roleName);
     ResponseModel getAll(Object filters);
     ResponseModel getById(Long id);
