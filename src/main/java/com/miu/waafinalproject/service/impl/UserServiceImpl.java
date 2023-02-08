@@ -62,8 +62,6 @@ public class UserServiceImpl implements UserService {
                         userObj.getFirstName(),
                         userObj.getLastName(),
                         userObj.getMiddleName(),
-                        userObj.getAddress(),
-                        userObj.getPhone(),
                         userObj.getRoles().stream().findFirst().get().getRoleName(),
                         userObj.getUsername()
                 )
@@ -96,9 +94,8 @@ public class UserServiceImpl implements UserService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getMiddleName(),
-                user.getAddress(),
-                user.getUsername(),
-                user.getPhone()));
+                user.getUsername()
+                ));
         return responseModel;
     }
 
@@ -110,8 +107,6 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(requestModel.getFirstName());
         user.setLastName(requestModel.getLastName());
         user.setMiddleName(requestModel.getMiddleName());
-        user.setAddress(requestModel.getAddress());
-        user.setPhone(requestModel.getPhone());
         user.setIsActive(requestModel.getUserRole().equals(UserRoles.CUSTOMER.toString()));
         user.setRoles(roleRepo.findAllByRoleName(requestModel.getUserRole()));
         user.setUsername(requestModel.getUsername());
@@ -130,8 +125,6 @@ public class UserServiceImpl implements UserService {
         Users user = usersRepo.findById(id).get();
         //user.setId(id);
         user.setEmail(requestModel.getEmail());
-        user.setAddress(requestModel.getAddress());
-        user.setPhone(requestModel.getPhone());
         user.setFirstName(requestModel.getFirstName());
         user.setLastName(requestModel.getLastName());
         user.setMiddleName(requestModel.getMiddleName());

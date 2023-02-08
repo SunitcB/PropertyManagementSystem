@@ -20,8 +20,6 @@ public class Users {
     String firstName;
     String lastName;
     String middleName;
-    String address;
-    String phone;
     String password;
     Boolean isActive = true;
 

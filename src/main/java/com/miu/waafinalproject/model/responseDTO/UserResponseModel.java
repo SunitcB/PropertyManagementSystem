@@ -11,7 +11,5 @@ public class UserResponseModel {
     String firstName;
     String lastName;
     String middleName;
-    String address;
-    String phone;
     String username;
 }
