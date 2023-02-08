@@ -59,7 +59,9 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyOption().getType(),
                                 x.getPropertyDetail().getBed(),
                                 x.getPropertyDetail().getBath(),
-                                x.getBuiltYear()
+                                x.getBuiltYear(),
+                                x.getPropertyStatus(),
+                                x.getFavorites().stream().filter(fav -> fav.getUsers().equals(userService.getLoggedInUser())).count() > 0
                         ));
             } catch (IOException e) {
                 e.printStackTrace();
