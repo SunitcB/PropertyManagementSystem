@@ -156,6 +156,8 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
             }
         } else {
             responseModel.setMessage("Property offer has been rejected.");
+            targetProperty.setPropertyStatus(PropertyStatus.AVAILABLE.toString());
+            propertyRepo.save(targetProperty);
         }
 
         responseModel.setStatus(HttpStatus.OK);
