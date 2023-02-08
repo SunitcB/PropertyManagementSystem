@@ -7,5 +7,4 @@ import lombok.Data;
 @AllArgsConstructor
 public class FavoriteListResponseModel {
     PropertyListResponseModel property;
-    Long id;
 }

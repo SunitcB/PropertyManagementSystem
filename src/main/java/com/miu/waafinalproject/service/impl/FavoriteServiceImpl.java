@@ -34,7 +34,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseModel getAll() {
         responseModel = new ResponseModel();
-        List<FavoriteListResponseModel> responseObj = new ArrayList<>();
+        List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         favoriteRepo.findAll().forEach(x -> {
             try {
@@ -54,9 +54,8 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         x.getProperties().getPropertyStatus(),
                                         true,
                                         x.getProperties().getPropertyView().stream().count()
-                                ),
-                                x.getId()
-                        ));
+                                )
+                        ).getProperty());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -69,12 +68,20 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseModel favorite(UUID id) {
         responseModel = new ResponseModel();
-        Favorite favorite = new Favorite();
-        favorite.setUsers(userService.getLoggedInUser());
-        favorite.setProperties(propertyRepo.findById(id).get());
-        favoriteRepo.save(favorite);
-        responseModel.setStatus(HttpStatus.OK);
-        responseModel.setMessage("Property has been favorite successfully.");
+        Favorite fav = favoriteRepo.findByUsersAndProperties_Id(userService.getLoggedInUser(),id);
+        if(fav !=null){
+            favoriteRepo.deleteById(fav.getId());
+            responseModel.setStatus(HttpStatus.OK);
+            responseModel.setMessage("Property has been removed from favorite successfully.");
+        }
+        else{
+            Favorite favorite = new Favorite();
+            favorite.setUsers(userService.getLoggedInUser());
+            favorite.setProperties(propertyRepo.findById(id).get());
+            favoriteRepo.save(favorite);
+            responseModel.setStatus(HttpStatus.OK);
+            responseModel.setMessage("Property has been favorite successfully.");
+        }
         return responseModel;
     }
 
