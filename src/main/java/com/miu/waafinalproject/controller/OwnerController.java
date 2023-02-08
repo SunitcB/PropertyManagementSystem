@@ -22,4 +22,11 @@ public class OwnerController {
         responseModel = ownerService.getAllOwnedPropertyList();
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
+
+
+    @GetMapping("/application")
+    public ResponseEntity<ResponseModel> getOwnersPropertyApplicationList() {
+        responseModel = ownerService.getAllOwnedPropertyApplicationList();
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
 }

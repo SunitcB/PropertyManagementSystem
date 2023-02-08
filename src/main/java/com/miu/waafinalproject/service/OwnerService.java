@@ -4,4 +4,5 @@ import com.miu.waafinalproject.model.ResponseModel;
 
 public interface OwnerService {
     ResponseModel getAllOwnedPropertyList();
+    ResponseModel getAllOwnedPropertyApplicationList();
 }
