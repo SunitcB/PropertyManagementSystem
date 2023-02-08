@@ -9,8 +9,6 @@ public class UserRequestModel {
     String firstName;
     String lastName;
     String middleName;
-    String address;
-    String phone;
     String password;
     String username;
     String userRole;

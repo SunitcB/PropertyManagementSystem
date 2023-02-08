@@ -34,7 +34,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseModel getAll() {
         responseModel = new ResponseModel();
-        List<PropertyListResponseModel> responseObj = new ArrayList<>();
+        List<FavoriteListResponseModel> responseObj = new ArrayList<>();
 
         favoriteRepo.findAll().forEach(x -> {
             try {
@@ -54,8 +54,9 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         x.getProperties().getPropertyStatus(),
                                         true,
                                         x.getProperties().getPropertyView().stream().count()
-                                )
-                           ).getProperty());
+                                ),
+                                x.getId()
+                        ));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

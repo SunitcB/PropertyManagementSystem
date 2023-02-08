@@ -9,11 +9,13 @@ import com.miu.waafinalproject.repository.PropertyApplicationRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.PropertyApplicationService;
 import com.miu.waafinalproject.service.UserService;
+import com.miu.waafinalproject.utils.enums.ApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PropertyApplicationServiceImpl implements PropertyApplicationService {
     private ResponseModel responseModel;
     private final PropertyApplicationRepo applicationRepo;
@@ -118,15 +121,46 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     public ResponseModel updateOffer(Long id, PropertyApplicationRequestModel applicationModel) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
+        Property targetProperty = propertyRepo.findById(applicationModel.getPropertyId()).get();
         PropertyApplication application = new PropertyApplication();
         application.setId(id);
-        application.setProperty(propertyRepo.findById(applicationModel.getPropertyId()).get());
+        application.setProperty(targetProperty);
         application.setStatus(applicationModel.getStatus());
         application.setRemarks(applicationModel.getRemarks());
         application.setOfferPrice(applicationModel.getOfferPrice());
         application.setUsers(userService.getLoggedInUser());
         applicationRepo.save(application);
+
         responseModel.setMessage("Property offer application has been submitted.");
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel acceptOffer(Long id, String action) {
+        responseModel = new ResponseModel();
+        PropertyApplication applicationObj = applicationRepo.findById(id).get();
+        Property targetProperty = applicationObj.getProperty();
+        applicationObj.setStatus(action);
+        applicationRepo.save(applicationObj);
+
+        if (action.equals(ApplicationStatus.ACCEPT.toString())) {
+            responseModel.setMessage("Property offer has been accepted.");
+            targetProperty.setPropertyStatus(PropertyStatus.PENDING.toString());
+            propertyRepo.save(targetProperty);
+
+            for (PropertyApplication restOfApplication : applicationRepo.findAllByProperty_Id(targetProperty.getId())) {
+                if (restOfApplication.getId() != id) {
+                    restOfApplication.setStatus(ApplicationStatus.REJECT.toString());
+                    applicationRepo.save(restOfApplication);
+                }
+            }
+        } else {
+            responseModel.setMessage("Property offer has been rejected.");
+            targetProperty.setPropertyStatus(PropertyStatus.AVAILABLE.toString());
+            propertyRepo.save(targetProperty);
+        }
+
+        responseModel.setStatus(HttpStatus.OK);
         return responseModel;
     }
 }

@@ -18,4 +18,5 @@ public class OwnerPropertyListResponseModel {
     Short bath;
     Integer builtYear;
     Integer offerCount;
+    Integer viewCount;
 }
