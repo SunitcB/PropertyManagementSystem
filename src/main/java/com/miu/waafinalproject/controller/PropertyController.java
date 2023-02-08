@@ -20,10 +20,24 @@ public class PropertyController {
     private final PropertyService propertyService;
 
     @GetMapping
-    public ResponseEntity<ResponseModel> getAllProperty(@RequestParam(required = false) String filter) {
+    public ResponseEntity<ResponseModel> getAllProperty(
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) String propertyOption,
+            @RequestParam(required = false) Integer roomSize,
+            @RequestParam(required = false) String submissionDate,
+            @RequestParam(required = false) String propertyType,
+            @RequestParam(required = false) String location) {
         HashMap<String, Object> filterMap = new HashMap<>();
-        filterMap.put("filter", filter);
-        responseModel = propertyService.getAll(filterMap);
+        filterMap.put("price", price);
+        filterMap.put("propertyOption", propertyOption);
+        filterMap.put("roomSize", roomSize);
+        filterMap.put("propertyType", propertyType);
+        filterMap.put("location", location);
+        if(price == null && propertyOption == null && roomSize== null && propertyType == null && location == null){
+            responseModel = propertyService.getAll(null);
+        } else {
+            responseModel = propertyService.getAll(filterMap);
+        }
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 

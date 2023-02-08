@@ -13,14 +13,20 @@ import com.miu.waafinalproject.service.PropertyService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +34,7 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class PropertyServiceImpl implements PropertyService {
+    private final EntityManager entityManager;
     private final PropertyRepo propertyRepo;
     private final PropertyDetailRepo propertyDetailRepo;
     private final AddressRepo addressRepo;
@@ -40,12 +47,18 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyImageUtil imageUtil;
 
     @Override
-    public ResponseModel getAll(Object filters) {
+    public ResponseModel getAll(HashMap<String, Object> filters) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
+        List<Property> propertyList = new ArrayList<>();
+        if (filters == null) {
+            propertyRepo.findAll().forEach(propertyList::add);
+        } else {
+            propertyList = filterProperties(filters);
+        }
 
-        propertyRepo.findAll(Sort.by("title")).forEach(x -> {
+        propertyList.forEach(x -> {
             try {
                 responseObj.add(
                         new PropertyListResponseModel(
@@ -71,6 +84,34 @@ public class PropertyServiceImpl implements PropertyService {
 
         responseModel.setData(responseObj);
         return responseModel;
+    }
+
+    @Override
+    public List<Property> filterProperties(HashMap<String, Object> filters) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Property.class);
+
+        List<Predicate> predicateList = new ArrayList<>();
+        Root<Property> property = criteriaQuery.from(Property.class);
+        if (filters.get("price") != null) {
+            predicateList.add(criteriaBuilder.equal(property.get("price"), filters.get("price")));
+        }
+        if (filters.get("roomSize") != null) {
+            predicateList.add(criteriaBuilder.equal(property.get("propertyDetail").get("bed"), filters.get("roomSize")));
+        }
+        if (filters.get("location") != null) {
+            predicateList.add(criteriaBuilder.equal(property.get("address").get("state"), filters.get("location")));
+        }
+        if (filters.get("propertyOption") != null) {
+            predicateList.add(criteriaBuilder.equal(property.get("propertyOption").get("type"), filters.get("propertyOption")));
+        }
+        if (filters.get("propertyType") != null) {
+            predicateList.add(criteriaBuilder.equal(property.get("propertyType").get("name"), filters.get("propertyType")));
+        }
+        criteriaQuery.where(predicateList.toArray(new Predicate[0]));
+
+        TypedQuery<Property> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
     }
 
     @Override
@@ -147,7 +188,8 @@ public class PropertyServiceImpl implements PropertyService {
     public ResponseModel delete(UUID id) {
         responseModel = new ResponseModel();
         Property propertyObj = propertyRepo.findById(id).get();
-        if (propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING.toString())) {
+        if (propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING.toString())
+                || propertyObj.getPropertyStatus().equals(PropertyStatus.CONTINGENT.toString())) {
             responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
             responseModel.setMessage("Property has pending status so cannot be deleted.");
         } else {

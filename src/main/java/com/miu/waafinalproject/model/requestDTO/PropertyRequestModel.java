@@ -1,5 +1,6 @@
 package com.miu.waafinalproject.model.requestDTO;
 
+import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.Data;
 
 import java.util.UUID;
@@ -24,5 +25,5 @@ public class PropertyRequestModel {
     Integer zipcode;
     Long ownerId;
     Double price;
-    String propertyStatus = "PENDING";
+    String propertyStatus = PropertyStatus.AVAILABLE.toString();
 }
