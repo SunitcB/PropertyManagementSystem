@@ -34,12 +34,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseModel getAll() {
         responseModel = new ResponseModel();
-        List<FavoriteListResponseModel> responseObj = new ArrayList<>();
+        List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         favoriteRepo.findAll().forEach(x -> {
             try {
                 responseObj.add(
-                        new FavoriteListResponseModel(x.getId(),
+                        new FavoriteListResponseModel(
                                 new PropertyListResponseModel(
                                         x.getProperties().getId(),
                                         x.getProperties().getTitle(),
@@ -55,7 +55,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         true,
                                         x.getProperties().getPropertyView().stream().count()
                                 )
-                           ));
+                           ).getProperty());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

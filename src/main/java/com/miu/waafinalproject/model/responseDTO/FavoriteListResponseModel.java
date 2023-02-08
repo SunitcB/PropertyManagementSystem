@@ -9,6 +9,5 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class FavoriteListResponseModel {
-    Long id;
     PropertyListResponseModel property;
 }
