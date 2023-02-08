@@ -1,6 +1,7 @@
 package com.miu.waafinalproject.service.impl;
 
 import com.miu.waafinalproject.domain.Address;
+import com.miu.waafinalproject.domain.Favorite;
 import com.miu.waafinalproject.domain.Property;
 import com.miu.waafinalproject.domain.PropertyDetail;
 import com.miu.waafinalproject.model.ResponseModel;
@@ -37,8 +38,9 @@ public class PropertyServiceImpl implements PropertyService {
     private final UsersRepo usersRepo;
     private final UserService userService;
 
-    private final PropertyImageUtil imageUtil;
+    private final FavoriteRepo favoriteRepo;
 
+    private final PropertyImageUtil imageUtil;
     @Override
     public ResponseModel getAll(Object filters) {
         responseModel = new ResponseModel();
@@ -148,7 +150,7 @@ public class PropertyServiceImpl implements PropertyService {
     public ResponseModel delete(UUID id) {
         responseModel = new ResponseModel();
         Property propertyObj = propertyRepo.findById(id).get();
-        if (propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING)) {
+        if (propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING.toString())) {
             responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
             responseModel.setMessage("Property has pending status so cannot be deleted.");
         } else {

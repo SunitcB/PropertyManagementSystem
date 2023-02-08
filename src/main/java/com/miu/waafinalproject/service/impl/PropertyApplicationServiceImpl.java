@@ -1,5 +1,6 @@
 package com.miu.waafinalproject.service.impl;
 
+import com.miu.waafinalproject.domain.Property;
 import com.miu.waafinalproject.domain.PropertyApplication;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyApplicationRequestModel;
@@ -9,6 +10,7 @@ import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.PropertyApplicationService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
+import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -91,9 +93,16 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     @Override
     public ResponseModel deleteOffer(Long applicationId) {
         responseModel = new ResponseModel();
-        responseModel.setStatus(HttpStatus.OK);
-        applicationRepo.deleteById(applicationId);
-        responseModel.setMessage("Property offer application has been removed.");
+        PropertyApplication propertyApplicationObj = applicationRepo.findById(applicationId).get();
+        if (propertyApplicationObj.getStatus().equals(PropertyApplicationStatus.PENDING.toString())) {
+            responseModel.setStatus(HttpStatus.OK);
+            applicationRepo.deleteById(applicationId);
+            responseModel.setMessage("Application has been removed.");
+        }
+        else {
+            responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
+            responseModel.setMessage("Application has accepted/rejected status so cannot be deleted.");
+        }
         return responseModel;
     }
 
