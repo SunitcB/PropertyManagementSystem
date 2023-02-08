@@ -52,7 +52,6 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         x.getProperties().getPropertyDetail().getBath(),
                                         x.getProperties().getBuiltYear(),
                                         x.getProperties().getPropertyStatus(),
-                                        true,
                                         x.getProperties().getPropertyView().stream().count()
                                 )
                         ).getProperty());
