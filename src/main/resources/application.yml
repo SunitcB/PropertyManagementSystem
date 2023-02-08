@@ -27,7 +27,7 @@ spring:
     name: property-management-system
   datasource:
     password: 'guest'
-    url: jdbc:mysql://172.19.140.94:3306/manage_property
+    url: jdbc:mysql://localhost:3306/manage_property
     username: guest
   jpa:
     hibernate:

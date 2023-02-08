@@ -19,4 +19,5 @@ public class PropertyListResponseModel {
     Integer builtYear;
     String status;
     Boolean isFavorite;
+    long propertyViewCount;
 }

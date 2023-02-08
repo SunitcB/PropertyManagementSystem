@@ -60,7 +60,8 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyDetail().getBath(),
                                 x.getBuiltYear(),
                                 x.getPropertyStatus(),
-                                favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null
+                                favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null,
+                                x.getPropertyView().stream().count()
                         ));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,7 +89,7 @@ public class PropertyServiceImpl implements PropertyService {
                     property.getPrice(),
                     (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
                     property.getAddress(),
-                    (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
+                    (property.getPropertyView() != null) ? property.getPropertyView().stream().count() : 0,
                     imageUtil.imageToBase64(),
                     property.getBuiltYear(),
                     property.getPropertyStatus(),

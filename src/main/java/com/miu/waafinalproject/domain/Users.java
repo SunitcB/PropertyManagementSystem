@@ -26,7 +26,7 @@ public class Users {
     Boolean isActive = true;
 
     Boolean isDeleted = false;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JsonManagedReference
     List<Role> roles;
     String username;

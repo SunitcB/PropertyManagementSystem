@@ -1,9 +1,7 @@
 package com.miu.waafinalproject.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,8 @@ public class PropertyView {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Short count;
     String ipAddress;
+    @ManyToOne
+    @JsonBackReference
+    Property property;
 }
