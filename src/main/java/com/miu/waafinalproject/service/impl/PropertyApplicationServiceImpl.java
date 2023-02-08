@@ -42,7 +42,9 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
                                 application.getStatus(),
                                 application.getRemarks(),
                                 application.getOfferPrice(),
-                                application.getUsers().getUserFullName()
+                                application.getUsers().getUserFullName(),
+                                application.getProperty().getTitle(),
+                                application.getProperty().getOwner().getUserFullName()
                         )
                 )
         );
@@ -63,7 +65,9 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
                         app.getStatus(),
                         app.getRemarks(),
                         app.getOfferPrice(),
-                        app.getUsers().getUserFullName()
+                        app.getUsers().getUserFullName(),
+                        app.getProperty().getTitle(),
+                        app.getProperty().getOwner().getUserFullName()
                 ))
         );
         responseModel.setData(responseObj);

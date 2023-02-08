@@ -11,4 +11,6 @@ public class PropertyApplicationResponseModel {
     String remarks;
     Double offerPrice;
     String offeredBy;
+    String propertyTitle;
+    String owner;
 }
