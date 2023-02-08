@@ -26,10 +26,4 @@ public class FavoriteController {
         responseModel = favoriteService.getAll();
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseModel> delete(@PathVariable Long id){
-        responseModel = favoriteService.deleteById(id);
-        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
-    }
 }
