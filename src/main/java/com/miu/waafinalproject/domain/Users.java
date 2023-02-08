@@ -23,18 +23,21 @@ public class Users {
     String address;
     String phone;
     String password;
-    @OneToMany(fetch = FetchType.EAGER)
+    Boolean isActive = true;
+
+    Boolean isDeleted = false;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JsonManagedReference
     List<Role> roles;
     String username;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<Favorite> favorites;
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<PropertyApplication> propertyApplications;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<Property> properties;
 

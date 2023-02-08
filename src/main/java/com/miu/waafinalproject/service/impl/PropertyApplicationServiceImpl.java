@@ -78,15 +78,24 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     @Override
     public ResponseModel saveOffer(PropertyApplicationRequestModel applicationModel) {
         responseModel = new ResponseModel();
-        responseModel.setStatus(HttpStatus.OK);
-        PropertyApplication application = new PropertyApplication();
-        application.setProperty(propertyRepo.findById(applicationModel.getPropertyId()).get());
-        application.setStatus(PropertyApplicationStatus.PENDING.toString());
-        application.setRemarks(applicationModel.getRemarks());
-        application.setOfferPrice(applicationModel.getOfferPrice());
-        application.setUsers(userService.getLoggedInUser());
-        applicationRepo.save(application);
-        responseModel.setMessage("Property offer application has been submitted.");
+        Property propertyObj = propertyRepo.findById(applicationModel.getPropertyId()).get();
+        if (propertyObj == null
+                || (propertyObj.getPropertyStatus().equals(PropertyStatus.CONTINGENT.toString())
+                || propertyObj.getPropertyStatus().equals(PropertyStatus.PENDING.toString()))) {
+            responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
+            responseModel.setMessage("Property offer is not allowed for the property.");
+        } else {
+            responseModel.setStatus(HttpStatus.OK);
+            PropertyApplication application = new PropertyApplication();
+            application.setProperty(propertyObj);
+            application.setStatus(PropertyApplicationStatus.PENDING.toString());
+            application.setRemarks(applicationModel.getRemarks());
+            application.setOfferPrice(applicationModel.getOfferPrice());
+            application.setUsers(userService.getLoggedInUser());
+            applicationRepo.save(application);
+            responseModel.setMessage("Property offer application has been submitted.");
+        }
+
         return responseModel;
     }
 
@@ -98,8 +107,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
             responseModel.setStatus(HttpStatus.OK);
             applicationRepo.deleteById(applicationId);
             responseModel.setMessage("Application has been removed.");
-        }
-        else {
+        } else {
             responseModel.setStatus(HttpStatus.NOT_ACCEPTABLE);
             responseModel.setMessage("Application has accepted/rejected status so cannot be deleted.");
         }

@@ -17,4 +17,7 @@ public class PropertyListResponseModel {
     Short bed;
     Short bath;
     Integer builtYear;
+    String status;
+    Boolean isFavorite;
+    long propertyViewCount;
 }

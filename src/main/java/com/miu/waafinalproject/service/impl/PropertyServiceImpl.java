@@ -1,7 +1,6 @@
 package com.miu.waafinalproject.service.impl;
 
 import com.miu.waafinalproject.domain.Address;
-import com.miu.waafinalproject.domain.Favorite;
 import com.miu.waafinalproject.domain.Property;
 import com.miu.waafinalproject.domain.PropertyDetail;
 import com.miu.waafinalproject.model.ResponseModel;
@@ -34,13 +33,12 @@ public class PropertyServiceImpl implements PropertyService {
     private final AddressRepo addressRepo;
     private final PropertyOptionRepo propertyOptionRepo;
     private final PropertyTypeRepo propertyTypeRepo;
+    private final FavoriteRepo favoriteRepo;
     private ResponseModel responseModel;
     private final UsersRepo usersRepo;
     private final UserService userService;
-
-    private final FavoriteRepo favoriteRepo;
-
     private final PropertyImageUtil imageUtil;
+
     @Override
     public ResponseModel getAll(Object filters) {
         responseModel = new ResponseModel();
@@ -48,7 +46,6 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         propertyRepo.findAll(Sort.by("title")).forEach(x -> {
-
             try {
                 responseObj.add(
                         new PropertyListResponseModel(
@@ -61,7 +58,10 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyOption().getType(),
                                 x.getPropertyDetail().getBed(),
                                 x.getPropertyDetail().getBath(),
-                                x.getBuiltYear()
+                                x.getBuiltYear(),
+                                x.getPropertyStatus(),
+                                favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null,
+                                x.getPropertyView().stream().count()
                         ));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,10 +89,11 @@ public class PropertyServiceImpl implements PropertyService {
                     property.getPrice(),
                     (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
                     property.getAddress(),
-                    (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
+                    (property.getPropertyView() != null) ? property.getPropertyView().stream().count() : 0,
                     imageUtil.imageToBase64(),
                     property.getBuiltYear(),
-                    property.getPropertyStatus()));
+                    property.getPropertyStatus(),
+                    favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -1,5 +1,6 @@
 package com.miu.waafinalproject.controller;
 
+import com.miu.waafinalproject.aop.aspect.HandleView;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyRequestModel;
 import com.miu.waafinalproject.service.PropertyService;
@@ -27,6 +28,7 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
+    @HandleView
     public ResponseEntity<ResponseModel> getPropertyById(@PathVariable UUID id) {
         responseModel = propertyService.getById(id);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);

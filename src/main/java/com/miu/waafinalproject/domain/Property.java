@@ -20,7 +20,7 @@ public class Property {
     @GeneratedValue
     @UuidGenerator
     UUID id;
-//    @GeneratedValue(strategy = GenerationType.UUID)
+    //    @GeneratedValue(strategy = GenerationType.UUID)
 //    @UuidGenerator
 //    UUID uuid;
     String title;
@@ -35,8 +35,10 @@ public class Property {
     PropertyType propertyType;
     @OneToOne
     Address address;
-    @OneToOne
-    PropertyView propertyView;
+    @OneToMany
+    @JoinColumn(name = "property_id")
+    @JsonManagedReference
+    List<PropertyView> propertyView;
     @OneToMany
     @JsonManagedReference
     List<Favorite> favorites;

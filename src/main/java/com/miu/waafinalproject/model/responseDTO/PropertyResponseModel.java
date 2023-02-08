@@ -16,8 +16,9 @@ public class PropertyResponseModel {
     Double price;
     String propertyType;
     Address address;
-    Short propertyViewCount;
+    long propertyViewCount;
     String image;
     Integer builtYear;
     String propertyStatus;
+    Boolean isFavorite;
 }

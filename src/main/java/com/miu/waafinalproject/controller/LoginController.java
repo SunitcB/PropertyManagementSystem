@@ -2,7 +2,9 @@ package com.miu.waafinalproject.controller;
 
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.LoginRequestModel;
+import com.miu.waafinalproject.model.requestDTO.UserRequestModel;
 import com.miu.waafinalproject.service.AuthenticationService;
+import com.miu.waafinalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,16 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     private ResponseModel responseModel;
     private final AuthenticationService authenticationService;
+    private final UserService userService;
     @PostMapping
     public ResponseEntity<ResponseModel> loginUser(@RequestBody LoginRequestModel loginRequestModel){
         responseModel = authenticationService.authenticateUser(loginRequestModel);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<ResponseModel> saveUser(@RequestBody UserRequestModel requestModel){
+        responseModel = userService.save(requestModel);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }
