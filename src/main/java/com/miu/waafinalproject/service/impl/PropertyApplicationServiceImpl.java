@@ -136,24 +136,29 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     }
 
     @Override
-    public ResponseModel acceptOffer(Long id) {
+    public ResponseModel acceptOffer(Long id, String action) {
         responseModel = new ResponseModel();
         PropertyApplication applicationObj = applicationRepo.findById(id).get();
         Property targetProperty = applicationObj.getProperty();
+        applicationObj.setStatus(action);
+        applicationRepo.save(applicationObj);
 
-        applicationObj.setStatus(ApplicationStatus.ACCEPT.toString());
+        if (action.equals(ApplicationStatus.ACCEPT.toString())) {
+            responseModel.setMessage("Property offer has been accepted.");
+            targetProperty.setPropertyStatus(PropertyStatus.PENDING.toString());
+            propertyRepo.save(targetProperty);
 
-        targetProperty.setPropertyStatus(PropertyStatus.PENDING.toString());
-        propertyRepo.save(targetProperty);
-
-        for (PropertyApplication restOfApplication : applicationRepo.findAllByProperty_Id(targetProperty.getId())) {
-            if(restOfApplication.getId()!=id){
-                restOfApplication.setStatus(ApplicationStatus.REJECT.toString());
-                applicationRepo.save(restOfApplication);
+            for (PropertyApplication restOfApplication : applicationRepo.findAllByProperty_Id(targetProperty.getId())) {
+                if (restOfApplication.getId() != id) {
+                    restOfApplication.setStatus(ApplicationStatus.REJECT.toString());
+                    applicationRepo.save(restOfApplication);
+                }
             }
+        } else {
+            responseModel.setMessage("Property offer has been rejected.");
         }
+
         responseModel.setStatus(HttpStatus.OK);
-        responseModel.setMessage("Property offer has been accepted.");
         return responseModel;
     }
 }
