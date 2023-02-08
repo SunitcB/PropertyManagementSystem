@@ -1,7 +1,6 @@
 package com.miu.waafinalproject.service.impl;
 
 import com.miu.waafinalproject.domain.Address;
-import com.miu.waafinalproject.domain.Favorite;
 import com.miu.waafinalproject.domain.Property;
 import com.miu.waafinalproject.domain.PropertyDetail;
 import com.miu.waafinalproject.model.ResponseModel;
@@ -34,13 +33,12 @@ public class PropertyServiceImpl implements PropertyService {
     private final AddressRepo addressRepo;
     private final PropertyOptionRepo propertyOptionRepo;
     private final PropertyTypeRepo propertyTypeRepo;
+    private final FavoriteRepo favoriteRepo;
     private ResponseModel responseModel;
     private final UsersRepo usersRepo;
     private final UserService userService;
-
-    private final FavoriteRepo favoriteRepo;
-
     private final PropertyImageUtil imageUtil;
+
     @Override
     public ResponseModel getAll(Object filters) {
         responseModel = new ResponseModel();
@@ -48,7 +46,6 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
         propertyRepo.findAll(Sort.by("title")).forEach(x -> {
-
             try {
                 responseObj.add(
                         new PropertyListResponseModel(
@@ -63,7 +60,7 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyDetail().getBath(),
                                 x.getBuiltYear(),
                                 x.getPropertyStatus(),
-                                x.getFavorites().stream().filter(fav -> fav.getUsers().equals(userService.getLoggedInUser())).count() > 0
+                                favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), x) != null
                         ));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,7 +91,8 @@ public class PropertyServiceImpl implements PropertyService {
                     (property.getPropertyView() != null) ? property.getPropertyView().getCount() : 0,
                     imageUtil.imageToBase64(),
                     property.getBuiltYear(),
-                    property.getPropertyStatus()));
+                    property.getPropertyStatus(),
+                    favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

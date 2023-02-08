@@ -5,14 +5,12 @@ import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.responseDTO.AddressResponseModel;
 import com.miu.waafinalproject.model.responseDTO.FavoriteListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
-import com.miu.waafinalproject.model.responseDTO.PropertyResponseModel;
 import com.miu.waafinalproject.repository.FavoriteRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.FavoriteService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +50,9 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         x.getProperties().getPropertyOption().getType(),
                                         x.getProperties().getPropertyDetail().getBed(),
                                         x.getProperties().getPropertyDetail().getBath(),
-                                        x.getProperties().getBuiltYear()
+                                        x.getProperties().getBuiltYear(),
+                                        x.getProperties().getPropertyStatus(),
+                                        true
                                 )
                            ));
             } catch (IOException e) {
