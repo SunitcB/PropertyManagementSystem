@@ -39,6 +39,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkIfCurrentUserHasRole(String roleName) {
+        System.out.println("USER ROLES ========================>");
+        System.out.println(getLoggedInUser().getRoles().stream().findFirst().get().getRoleName());
+        return getLoggedInUser().getRoles().stream().findFirst().get().getRoleName().equals(roleName);
+    }
+
+    @Override
     public ResponseModel getLoggedInUserDetails() {
         responseModel = new ResponseModel();
         Users userObj = getLoggedInUser();
@@ -132,7 +139,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseModel delete(Long id) {
         responseModel = new ResponseModel();
-        if (getLoggedInUser().getRoles().stream().findFirst().get().getRoleName().equals(UserRoles.ADMIN.toString())) {
+        if (checkIfCurrentUserHasRole(UserRoles.ADMIN.toString())) {
             //usersRepo.deleteById(id);
             Users user = usersRepo.findById(id).get();
             user.setIsDeleted(true);

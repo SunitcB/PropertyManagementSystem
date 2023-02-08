@@ -2,14 +2,11 @@ package com.miu.waafinalproject.service;
 
 import com.miu.waafinalproject.domain.Users;
 import com.miu.waafinalproject.model.ResponseModel;
-import com.miu.waafinalproject.model.requestDTO.PropertyRequestModel;
 import com.miu.waafinalproject.model.requestDTO.UserRequestModel;
-
-import java.util.UUID;
-import com.miu.waafinalproject.model.ResponseModel;
 
 public interface UserService {
     Users getLoggedInUser();
+    boolean checkIfCurrentUserHasRole(String roleName);
     ResponseModel getAll(Object filters);
     ResponseModel getById(Long id);
     ResponseModel save(UserRequestModel requestModel);
