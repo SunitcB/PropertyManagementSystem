@@ -4,10 +4,9 @@ import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/owner")
@@ -25,8 +24,16 @@ public class OwnerController {
 
 
     @GetMapping("/application")
-    public ResponseEntity<ResponseModel> getOwnersPropertyApplicationList() {
-        responseModel = ownerService.getAllOwnedPropertyApplicationList();
+    public ResponseEntity<ResponseModel> getOwnersPropertyApplicationList(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String submissionDate,
+            @RequestParam(required = false) String location
+    ) {
+        HashMap<String, Object> filters = new HashMap<>();
+        filters.put("title", title);
+        filters.put("submissionDate", submissionDate);
+        filters.put("location", location);
+        responseModel = ownerService.getAllOwnedPropertyApplicationList(filters);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }
