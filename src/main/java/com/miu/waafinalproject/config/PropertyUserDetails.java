@@ -21,6 +21,7 @@ public class PropertyUserDetails implements UserDetails {
     String username;
     String password;
     List<Role> roles;
+    Boolean isEnabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -44,6 +45,6 @@ public class PropertyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
     }
 }

@@ -18,7 +18,7 @@ public class PropertyUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users userObj = usersRepo.findByUsername(username);
-        PropertyUserDetails userDetails = new PropertyUserDetails(userObj.getUsername(), userObj.getPassword(), userObj.getRoles());
+        PropertyUserDetails userDetails = new PropertyUserDetails(userObj.getUsername(), userObj.getPassword(), userObj.getRoles(), (userObj.getIsActive() && userObj.getIsVerified()));
         return userDetails;
     }
 }
