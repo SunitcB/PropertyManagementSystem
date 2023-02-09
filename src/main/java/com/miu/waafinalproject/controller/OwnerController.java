@@ -30,10 +30,16 @@ public class OwnerController {
             @RequestParam(required = false) String location
     ) {
         HashMap<String, Object> filters = new HashMap<>();
-        filters.put("title", title);
-        filters.put("submissionDate", submissionDate);
-        filters.put("location", location);
-        responseModel = ownerService.getAllOwnedPropertyApplicationList(filters);
+        if(title == null && submissionDate == null && location == null){
+            responseModel = ownerService.getAllOwnedPropertyApplicationList(null);
+        }else {
+            filters.put("title", title);
+            filters.put("submissionDate", submissionDate);
+            filters.put("location", location);
+            responseModel = ownerService.getAllOwnedPropertyApplicationList(filters);
+        }
+
+
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }

@@ -36,6 +36,8 @@ public class PropertyViewAspect {
         final Map<String, String> pathVariables = (Map<String, String>) request
                 .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         UUID propertyId = UUID.fromString(pathVariables.get("id"));
+        System.out.println("__________________________________________________________");
+        System.out.println(ipAddress);
         Property property = propertyRepo.findById(propertyId).get();
         if (viewRepo.findByIpAddressAndProperty(ipAddress, property) == null) {
             PropertyView view = new PropertyView();

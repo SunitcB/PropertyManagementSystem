@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 @RestController
 @RequestMapping("/api/favorite")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FavoriteController {
     private ResponseModel responseModel;
     private final FavoriteService favoriteService;

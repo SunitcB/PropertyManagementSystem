@@ -47,7 +47,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyTypeRepo propertyTypeRepo;
     private final FavoriteRepo favoriteRepo;
     private ResponseModel responseModel;
-    private PropertyApplicationRepo applicationRepo;
+    private final PropertyApplicationRepo applicationRepo;
     private final UsersRepo usersRepo;
     private final UserService userService;
     private final PropertyImageUtil imageUtil;
@@ -140,8 +140,7 @@ public class PropertyServiceImpl implements PropertyService {
                     (property.getPropertyView() != null) ? property.getPropertyView().stream().count() : 0,
                     imageUtil.imageToBase64(storageService.load(property.getId().toString()).getFile()),
                     property.getBuiltYear(),
-                    property.getPropertyStatus(),
-                    userService.hasToken() ? false : favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));
+                    property.getPropertyStatus()));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -177,7 +176,7 @@ public class PropertyServiceImpl implements PropertyService {
     public ResponseModel showHideProperty(UUID propertyId, String action) {
         responseModel = new ResponseModel();
         Property property = propertyRepo.findById(propertyId).get();
-        if (action == "show") {
+        if (action.equals("show")) {
             responseModel.setMessage("Property has been shown.");
             property.setIsActive(true);
         } else {
@@ -236,7 +235,7 @@ public class PropertyServiceImpl implements PropertyService {
         propertyObj.setPropertyStatus(PropertyStatus.CONTINGENT.toString());
         propertyRepo.save(propertyObj);
 
-        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.ACCEPTED.toString());
+        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.APPROVED.toString());
         application.setStatus(PropertyApplicationStatus.CONTRACTED.toString());
         emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
                 "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+

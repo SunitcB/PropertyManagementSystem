@@ -2,7 +2,7 @@ package com.miu.waafinalproject.utils.enums;
 
 public enum PropertyApplicationStatus {
     PENDING,
-    ACCEPTED,
+    APPROVED,
     REJECTED,
     CONTRACTED
 }

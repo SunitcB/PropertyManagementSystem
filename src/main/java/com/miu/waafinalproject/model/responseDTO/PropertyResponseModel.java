@@ -20,5 +20,4 @@ public class PropertyResponseModel {
     String image;
     Integer builtYear;
     String propertyStatus;
-    Boolean isFavorite;
 }

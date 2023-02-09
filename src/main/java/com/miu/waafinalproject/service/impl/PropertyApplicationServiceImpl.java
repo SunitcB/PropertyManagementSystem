@@ -167,14 +167,14 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
         applicationObj.setStatus(action);
         applicationRepo.save(applicationObj);
 
-        if (action.equals(ApplicationStatus.ACCEPT.toString())) {
+        if (action.equals(ApplicationStatus.APPROVED.toString())) {
             responseModel.setMessage("Property offer has been accepted.");
             targetProperty.setPropertyStatus(PropertyStatus.PENDING.toString());
             propertyRepo.save(targetProperty);
 
             for (PropertyApplication restOfApplication : applicationRepo.findAllByProperty_Id(targetProperty.getId())) {
                 if (restOfApplication.getId() != id) {
-                    restOfApplication.setStatus(ApplicationStatus.REJECT.toString());
+                    restOfApplication.setStatus(ApplicationStatus.REJECTED.toString());
                     applicationRepo.save(restOfApplication);
                 }
             }

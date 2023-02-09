@@ -18,7 +18,7 @@ public class JwtUtil {
     private String SECRET_KEY = "property-app";
     private final long expiration = 5 * 60 * 60 * 60;
     private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
-    private final long forgotPasswordToken = 1 * 60 * 1000;
+    private final long forgotPasswordToken = 24* 60*60 * 60 * 1000;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
