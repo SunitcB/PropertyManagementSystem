@@ -13,6 +13,7 @@ import com.miu.waafinalproject.repository.*;
 import com.miu.waafinalproject.service.FileStorageService;
 import com.miu.waafinalproject.service.PropertyService;
 import com.miu.waafinalproject.service.UserService;
+import com.miu.waafinalproject.utils.EmailSenderUtil;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
 import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
@@ -51,6 +52,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final UserService userService;
     private final PropertyImageUtil imageUtil;
     private final FileStorageService storageService;
+    private final EmailSenderUtil emailSenderUtil;
 
     @Override
     public ResponseModel getAll(HashMap<String, Object> filters) {
@@ -236,6 +238,11 @@ public class PropertyServiceImpl implements PropertyService {
 
         PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.ACCEPTED.toString());
         application.setStatus(PropertyApplicationStatus.CONTRACTED.toString());
+        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "Registration approved on SRNA Portal as a seller", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
+                "Congratulations! You are approved to be a certified real state seller from SRNA portal."+
+                "\n\n" +
+                "Yours truly,\n" +
+                "The SRNA team");
         applicationRepo.save(application);
         responseModel.setStatus(HttpStatus.OK);
         responseModel.setMessage("Property has been declared contingent");
