@@ -165,7 +165,7 @@ public class PropertyServiceImpl implements PropertyService {
     public ResponseModel update(UUID id, PropertyRequestModel requestModel) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
-        Property property = new Property();
+        Property property = propertyRepo.findById(id).get();
 
         property.setId(id);
         property.setTitle(requestModel.getTitle());
