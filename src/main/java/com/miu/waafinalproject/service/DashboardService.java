@@ -5,6 +5,6 @@ import com.miu.waafinalproject.model.ResponseModel;
 
 public interface DashboardService {
 
-    ResponseModel getDashboardChartData();
-
+    ResponseModel getAdminDashboardChartData();
+    ResponseModel getOwnerDashboardChartData();
 }

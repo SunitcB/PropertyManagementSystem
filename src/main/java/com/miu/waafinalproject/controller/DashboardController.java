@@ -16,9 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardController {
     private ResponseModel responseModel;
     private final DashboardService dashboardService;
-    @GetMapping
-    public ResponseEntity<ResponseModel> getData(){
-        responseModel = dashboardService.getDashboardChartData();
+
+    @GetMapping("/admin")
+    public ResponseEntity<ResponseModel> getAdminData() {
+        responseModel = dashboardService.getAdminDashboardChartData();
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<ResponseModel> getOwnerData() {
+        responseModel = dashboardService.getOwnerDashboardChartData();
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }
