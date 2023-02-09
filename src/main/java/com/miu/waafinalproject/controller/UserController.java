@@ -15,17 +15,17 @@ public class UserController {
     private ResponseModel responseModel;
     private final UserService userService;
 
+    @GetMapping
+    public ResponseEntity<ResponseModel> getAllUser(@RequestParam(required = false) String filter) {
+        responseModel = userService.getAll(filter);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
     @GetMapping("/userDetails")
     public ResponseEntity<ResponseModel> getUserDetails() {
         responseModel = userService.getLoggedInUserDetails();
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseModel> getAllUser(@RequestParam(required = false) String filter) {
-        //responseModel = userService;
-        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseModel> getUserById(@PathVariable Long id) {
@@ -43,5 +43,11 @@ public class UserController {
     public ResponseEntity<ResponseModel> deleteUser(@PathVariable Long id){
         responseModel = userService.delete(id);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+    @PostMapping("/active-inactive/{id}")
+    public ResponseEntity<ResponseModel> activeInactiveUser(@PathVariable Long id){
+        responseModel = userService.changeActiveStatus(id);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+
     }
 }

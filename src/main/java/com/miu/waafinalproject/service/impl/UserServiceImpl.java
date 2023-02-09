@@ -4,6 +4,8 @@ import com.miu.waafinalproject.config.PropertyUserDetails;
 import com.miu.waafinalproject.domain.Users;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.UserRequestModel;
+import com.miu.waafinalproject.model.responseDTO.AddressResponseModel;
+import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.UserDetailsModel;
 import com.miu.waafinalproject.model.responseDTO.UserResponseModel;
 import com.miu.waafinalproject.repository.RoleRepo;
@@ -18,8 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -70,12 +74,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseModel changeActiveStatus(Long id) {
+        responseModel = new ResponseModel();
+        Users userDetail = usersRepo.findById(id).get();
+        userDetail.setIsActive(userDetail.getIsActive() ? false : true);
+
+        usersRepo.save(userDetail);
+
+        responseModel.setStatus(HttpStatus.OK);
+        responseModel.setMessage("User status has been changed successfully");
+        return responseModel;
+    }
+
+    @Override
     public ResponseModel getAll(Object filters) {
         responseModel = new ResponseModel();
         responseModel.setStatus(HttpStatus.OK);
         List<UserResponseModel> responseObj = new ArrayList<>();
-        usersRepo.findAll();
-        return null;
+        usersRepo.findAll().forEach(x-> {
+            if (!Objects.equals(x.getRoles().get(0).getRoleName(), "ADMIN")) {
+                responseObj.add(
+                        new UserResponseModel(
+                                x.getId(),
+                                x.getEmail(),
+                                x.getFirstName(),
+                                x.getLastName(),
+                                x.getMiddleName(),
+                                x.getUsername(),
+                                x.getRoles().get(0)
+                        ));
+            }
+        });
+
+        responseModel.setData(responseObj);
+        return responseModel;
     }
 
     @Override
@@ -94,7 +126,8 @@ public class UserServiceImpl implements UserService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getMiddleName(),
-                user.getUsername()
+                user.getUsername(),
+                user.getRoles().get(0)
                 ));
         return responseModel;
     }

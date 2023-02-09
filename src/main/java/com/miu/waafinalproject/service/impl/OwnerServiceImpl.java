@@ -52,7 +52,8 @@ public class OwnerServiceImpl implements OwnerService {
                             p.getPropertyDetail().getBath(),
                             p.getBuiltYear(),
                             p.getApplications().size(),
-                            p.getPropertyView().size()
+                            p.getPropertyView().size(),
+                            p.getPropertyStatus()
                     ));
                 }
         );

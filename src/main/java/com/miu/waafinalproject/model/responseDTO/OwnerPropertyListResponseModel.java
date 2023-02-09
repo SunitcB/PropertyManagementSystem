@@ -19,4 +19,5 @@ public class OwnerPropertyListResponseModel {
     Integer builtYear;
     Integer offerCount;
     Integer viewCount;
+    String propertStatus;
 }

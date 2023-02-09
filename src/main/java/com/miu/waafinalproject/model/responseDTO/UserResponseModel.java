@@ -1,5 +1,6 @@
 package com.miu.waafinalproject.model.responseDTO;
 
+import com.miu.waafinalproject.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class UserResponseModel {
     String lastName;
     String middleName;
     String username;
+    Role role;
 }

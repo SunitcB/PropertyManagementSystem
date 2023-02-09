@@ -14,4 +14,6 @@ public interface UserService {
     ResponseModel update(Long id, UserRequestModel requestModel);
     ResponseModel delete(Long id);
     ResponseModel getLoggedInUserDetails();
+
+    ResponseModel changeActiveStatus(Long id);
 }
