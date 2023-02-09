@@ -15,5 +15,5 @@ public class PdfResponseModel {
     private Address address;
     private double costPrice;
     private double tax;
-    private double sellingPrice = this.tax/100*this.costPrice;
+    private double sellingPrice;
 }

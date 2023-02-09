@@ -91,6 +91,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
         pdfModel.setCostPrice(application.getOfferPrice());
         pdfModel.setContractDate(LocalDate.now());
         pdfModel.setAddress(application.getProperty().getAddress());
+        pdfModel.setSellingPrice((pdfModel.getTax() / 100 * pdfModel.getCostPrice()) + pdfModel.getCostPrice());
         pdfModel.setBuyerName(application.getProperty().getOwner().getUserFullName());
         pdfModel.setSellerName(application.getUsers().getUserFullName());
         return pdfModel;
@@ -115,7 +116,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
             application.setUsers(userService.getLoggedInUser());
             applicationRepo.save(application);
             emailSenderUtil.sendSimpleEmail(application.getProperty().getOwner().getEmail(), "Your property has a new offer", "Dear " + application.getProperty().getOwner().getFirstName() + ",\n" +
-                    "Your property listed on SRNA portal has a new offer. PLease login to the portal to view the details."+
+                    "Your property listed on SRNA portal has a new offer. PLease login to the portal to view the details." +
                     "\n" +
                     "Yours truly,\n" +
                     "The SRNA team");
@@ -178,7 +179,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
                 }
             }
             emailSenderUtil.sendSimpleEmail(applicationObj.getUsers().getEmail(), "Your property offer has been accepted by seller", "Dear " + applicationObj.getUsers().getFirstName() + ",\n\n" +
-                    "Your property offer has been approved by the seller. PLease login to the portal to view the details."+
+                    "Your property offer has been approved by the seller. PLease login to the portal to view the details." +
                     "\n\n" +
                     "Yours truly,\n" +
                     "The SRNA team");
