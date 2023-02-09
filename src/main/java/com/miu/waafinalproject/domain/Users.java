@@ -28,7 +28,7 @@ public class Users {
     @JsonManagedReference
     List<Role> roles;
     String username;
-
+    Boolean isVerified = true;
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<Favorite> favorites;

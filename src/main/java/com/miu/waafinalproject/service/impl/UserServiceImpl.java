@@ -4,8 +4,6 @@ import com.miu.waafinalproject.config.PropertyUserDetails;
 import com.miu.waafinalproject.domain.Users;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.UserRequestModel;
-import com.miu.waafinalproject.model.responseDTO.AddressResponseModel;
-import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.UserDetailsModel;
 import com.miu.waafinalproject.model.responseDTO.UserResponseModel;
 import com.miu.waafinalproject.repository.RoleRepo;
@@ -20,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -102,7 +99,8 @@ public class UserServiceImpl implements UserService {
                                 x.getMiddleName(),
                                 x.getUsername(),
                                 x.getRoles().get(0),
-                                x.getIsActive()
+                                x.getIsActive(),
+                                x.getIsVerified()
                         ));
             }
         });
@@ -129,7 +127,8 @@ public class UserServiceImpl implements UserService {
                 user.getMiddleName(),
                 user.getUsername(),
                 user.getRoles().get(0),
-                user.getIsActive()
+                user.getIsActive(),
+                user.getIsVerified()
                 ));
         return responseModel;
     }
@@ -146,6 +145,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roleRepo.findAllByRoleName(requestModel.getUserRole()));
         user.setUsername(requestModel.getUsername());
         user.setPassword(new BCryptPasswordEncoder().encode(requestModel.getPassword()));
+        user.setIsVerified(requestModel.getUserRole().equals(UserRoles.CUSTOMER.toString()));
         usersRepo.save(user);
 
         responseModel.setStatus(HttpStatus.OK);

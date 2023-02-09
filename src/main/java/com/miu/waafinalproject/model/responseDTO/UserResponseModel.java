@@ -15,5 +15,5 @@ public class UserResponseModel {
     String username;
     Role role;
     Boolean isActive;
-
+    Boolean isVerified;
 }

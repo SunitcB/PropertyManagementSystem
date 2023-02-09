@@ -26,12 +26,12 @@ public class AdminServiceImpl implements AdminService {
         Users userObj = usersRepo.findById(userId).get();
 
         if (userService.checkIfCurrentUserHasRole(UserRoles.ADMIN.toString())) {
-//            Users userObj = usersRepo.findById(userId).get();
             userObj.setIsActive(true);
+            userObj.setIsVerified(true);
             usersRepo.save(userObj);
-            emailSenderUtil.sendSimpleEmail(userObj.getEmail(), "Registration approved on SRNA Portal as a seller", "Dear " + userObj.getFirstName() + ",\n" +
+            emailSenderUtil.sendSimpleEmail(userObj.getEmail(), "Registration approved on SRNA Portal as a seller", "Dear " + userObj.getFirstName() + ",\n\n" +
                     "Congratulations! You are approved to be a certified real state seller from SRNA portal."+
-                    "\n" +
+                    "\n\n" +
                     "Yours truly,\n" +
                     "The SRNA team");
             responseModel.setStatus(HttpStatus.OK);
