@@ -6,9 +6,14 @@ import com.miu.waafinalproject.model.responseDTO.OwnerDashboardResponseModel;
 import com.miu.waafinalproject.repository.*;
 import com.miu.waafinalproject.service.DashboardService;
 import com.miu.waafinalproject.service.UserService;
+import com.miu.waafinalproject.service.charts.Top10ContingentProperty;
+import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final PropertyViewRepo propertyViewRepo;
     private final PropertyApplicationRepo applicationRepo;
     private final AddressRepo addressRepo;
+    private final PropertyRepo propertyRepo;
     private final PropertyTypeRepo propertyTypeRepo;
     private final UserService userService;
     private final FavoriteRepo favoriteRepo;
@@ -28,6 +34,16 @@ public class DashboardServiceImpl implements DashboardService {
         AdminDashboardResponseModel dashboardModel = new AdminDashboardResponseModel();
         dashboardModel.setStatePropertyChartData(addressRepo.findAllStateCount());
         dashboardModel.setPropertyTypeCountChartData(propertyTypeRepo.getPropertyTypeCountChartData());
+        List<Top10ContingentProperty> top10Contingent = new ArrayList<>();
+        propertyRepo.findTop10ByPropertyStatusOrderByPriceDesc(PropertyStatus.CONTINGENT.toString()).forEach(x ->
+                top10Contingent.add(new Top10ContingentProperty(
+                        x.getTitle(),
+                        x.getAddress().getState(),
+                        x.getPrice(),
+                        x.getOwner().getUserFullName()
+                ))
+        );
+        dashboardModel.setTop10ContingentProperties(top10Contingent);
 
         responseModel.setData(dashboardModel);
         responseModel.setStatus(HttpStatus.OK);
@@ -50,4 +66,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         return responseModel;
     }
+
+
 }

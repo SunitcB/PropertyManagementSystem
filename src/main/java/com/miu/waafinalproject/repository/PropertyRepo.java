@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface PropertyRepo extends JpaRepository<Property, UUID> {
     List<Property> findAllByOwner(Users owner);
     List<Property> findAllByIsActive(boolean isActive);
+    List<Property> findTop10ByPropertyStatusOrderByPriceDesc(String status);
 }
