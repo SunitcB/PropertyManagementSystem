@@ -73,10 +73,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseModel resetPassword(LoginRequestModel forgotModel) {
+    public ResponseModel resetPassword(LoginRequestModel forgotModel, String token) {
         responseModel = new ResponseModel();
-
-        Users userObj = usersRepo.findByUsername(forgotModel.getUsername());
+        String userName = jwtUtil.extractUsername(token);
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%");
+        System.out.println(userName);
+        Users userObj = usersRepo.findByUsername(userName);
         if (userObj != null) {
             userObj.setPassword(new BCryptPasswordEncoder().encode(forgotModel.getPassword()));
             usersRepo.save(userObj);

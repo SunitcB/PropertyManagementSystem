@@ -36,9 +36,9 @@ public class LoginController {
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
-    @PutMapping("/resetPassword")
-    public ResponseEntity<ResponseModel> resetPassword(@RequestBody LoginRequestModel forgotModel) {
-        responseModel = authenticationService.resetPassword(forgotModel);
+    @PutMapping("/resetPassword/{token}")
+    public ResponseEntity<ResponseModel> resetPassword(@RequestBody LoginRequestModel forgotModel, @PathVariable String token) {
+        responseModel = authenticationService.resetPassword(forgotModel, token);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }

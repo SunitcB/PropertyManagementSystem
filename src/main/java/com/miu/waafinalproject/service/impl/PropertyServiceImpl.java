@@ -2,6 +2,7 @@ package com.miu.waafinalproject.service.impl;
 
 import com.miu.waafinalproject.domain.Address;
 import com.miu.waafinalproject.domain.Property;
+import com.miu.waafinalproject.domain.PropertyApplication;
 import com.miu.waafinalproject.domain.PropertyDetail;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyRequestModel;
@@ -13,6 +14,7 @@ import com.miu.waafinalproject.service.FileStorageService;
 import com.miu.waafinalproject.service.PropertyService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
+import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -44,6 +46,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyTypeRepo propertyTypeRepo;
     private final FavoriteRepo favoriteRepo;
     private ResponseModel responseModel;
+    private PropertyApplicationRepo applicationRepo;
     private final UsersRepo usersRepo;
     private final UserService userService;
     private final PropertyImageUtil imageUtil;
@@ -230,6 +233,9 @@ public class PropertyServiceImpl implements PropertyService {
         propertyObj.setPropertyStatus(PropertyStatus.CONTINGENT.toString());
         propertyRepo.save(propertyObj);
 
+        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.ACCEPTED.toString());
+        application.setStatus(PropertyApplicationStatus.CONTRACTED.toString());
+        applicationRepo.save(application);
         responseModel.setStatus(HttpStatus.OK);
         responseModel.setMessage("Property has been declared contingent");
 
