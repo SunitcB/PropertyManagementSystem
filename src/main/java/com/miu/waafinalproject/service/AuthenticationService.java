@@ -5,4 +5,6 @@ import com.miu.waafinalproject.model.requestDTO.LoginRequestModel;
 
 public interface AuthenticationService {
     ResponseModel authenticateUser(LoginRequestModel loginRequestModel);
+    ResponseModel forgotPassword(String userName);
+    ResponseModel resetPassword(LoginRequestModel forgotModel);
 }

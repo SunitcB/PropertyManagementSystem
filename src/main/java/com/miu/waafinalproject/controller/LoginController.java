@@ -17,15 +17,28 @@ public class LoginController {
     private ResponseModel responseModel;
     private final AuthenticationService authenticationService;
     private final UserService userService;
+
     @PostMapping
-    public ResponseEntity<ResponseModel> loginUser(@RequestBody LoginRequestModel loginRequestModel){
+    public ResponseEntity<ResponseModel> loginUser(@RequestBody LoginRequestModel loginRequestModel) {
         responseModel = authenticationService.authenticateUser(loginRequestModel);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseModel> saveUser(@RequestBody UserRequestModel requestModel){
+    public ResponseEntity<ResponseModel> saveUser(@RequestBody UserRequestModel requestModel) {
         responseModel = userService.save(requestModel);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @PatchMapping("/forgotPassword")
+    public ResponseEntity<ResponseModel> forgotPassword(@RequestParam String userName) {
+        responseModel = authenticationService.forgotPassword(userName);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @PutMapping("/resetPassword")
+    public ResponseEntity<ResponseModel> resetPassword(@RequestBody LoginRequestModel forgotModel) {
+        responseModel = authenticationService.resetPassword(forgotModel);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }

@@ -18,6 +18,7 @@ public class JwtUtil {
     private String SECRET_KEY = "property-app";
     private final long expiration = 5 * 60 * 60 * 60;
     private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
+    private final long forgotPasswordToken = 24 * 60 * 60 * 60 * 10;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -48,6 +49,11 @@ public class JwtUtil {
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername(), refreshExpiration);
+    }
+
+    public String generateForgotToken(String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userName, forgotPasswordToken);
     }
 
     private String createToken(Map<String, Object> claims, String subject, long expiration) {

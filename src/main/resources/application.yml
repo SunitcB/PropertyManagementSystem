@@ -43,10 +43,10 @@ spring:
     init:
       mode: always
   mail:
-    host: smtp.gmail.com
+    host: smtp-mail.outlook.com
     port: 25
-    username: waa.srna@gmail.com
-    password: "waajan2023"
+    username: waa.srna@outlook.com
+    password: "srna@2023"
     properties:
       mail:
         smtp:

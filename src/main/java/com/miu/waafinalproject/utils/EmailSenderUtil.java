@@ -14,7 +14,7 @@ public class EmailSenderUtil {
     public void sendSimpleEmail(String to, String subject, String body){
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("waa.srna@gmail.com");
+            message.setFrom("waa.srna@outlook.com");
             message.setTo(to);
             message.setSubject(subject);
             message.setText(body);
