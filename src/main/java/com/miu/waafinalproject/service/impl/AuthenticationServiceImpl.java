@@ -59,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } else {
             responseModel.setData(jwtUtil.generateForgotToken(userName));
             responseModel.setStatus(HttpStatus.OK);
-            emailSenderUtil.sendSimpleEmail(userName, "Reset password on SRNA property portal", "Dear " + userObj.getFirstName() + ",\n" +
+            emailSenderUtil.sendSimpleEmail(userObj.getEmail(), "Reset password on SRNA property portal", "Dear " + userObj.getFirstName() + ",\n" +
                     "To reset your password click the link below:\n" +
                     "http://localhost:3000/reset-password/" + responseModel.getData() + "\n" +
                     "\n" +

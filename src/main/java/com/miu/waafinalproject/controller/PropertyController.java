@@ -3,11 +3,14 @@ package com.miu.waafinalproject.controller;
 import com.miu.waafinalproject.aop.aspect.HandleView;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyRequestModel;
+import com.miu.waafinalproject.service.FileStorageService;
 import com.miu.waafinalproject.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class PropertyController {
     private ResponseModel responseModel;
     private final PropertyService propertyService;
+    private final FileStorageService storageService;
 
     @GetMapping
     public ResponseEntity<ResponseModel> getAllProperty(
@@ -33,7 +37,7 @@ public class PropertyController {
         filterMap.put("roomSize", roomSize);
         filterMap.put("propertyType", propertyType);
         filterMap.put("location", location);
-        if(price == null && propertyOption == null && roomSize== null && propertyType == null && location == null){
+        if (price == null && propertyOption == null && roomSize == null && propertyType == null && location == null) {
             responseModel = propertyService.getAll(null);
         } else {
             responseModel = propertyService.getAll(filterMap);
@@ -61,7 +65,7 @@ public class PropertyController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResponseModel> showHideProperty(@PathVariable UUID id, @RequestParam String action){
+    public ResponseEntity<ResponseModel> showHideProperty(@PathVariable UUID id, @RequestParam String action) {
         responseModel = propertyService.showHideProperty(id, action);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
@@ -73,8 +77,24 @@ public class PropertyController {
     }
 
     @PatchMapping("/{id}/contingent")
-    public ResponseEntity<ResponseModel> makeContingent(@PathVariable UUID id){
+    public ResponseEntity<ResponseModel> makeContingent(@PathVariable UUID id) {
         responseModel = propertyService.makeContingent(id);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @PostMapping("/propertyFile")
+    public ResponseEntity<ResponseModel> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam String propertyId) {
+        responseModel = storageService.save(file, propertyId);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
+    @DeleteMapping("/propertyFile/{id}")
+    public ResponseEntity<ResponseModel> deleteFile(@PathVariable UUID id) {
+        try {
+            responseModel = storageService.deleteFile(id.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 }

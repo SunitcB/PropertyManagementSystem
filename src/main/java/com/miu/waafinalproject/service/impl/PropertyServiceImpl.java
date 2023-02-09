@@ -9,6 +9,7 @@ import com.miu.waafinalproject.model.responseDTO.AddressResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyResponseModel;
 import com.miu.waafinalproject.repository.*;
+import com.miu.waafinalproject.service.FileStorageService;
 import com.miu.waafinalproject.service.PropertyService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final UsersRepo usersRepo;
     private final UserService userService;
     private final PropertyImageUtil imageUtil;
+    private final FileStorageService storageService;
 
     @Override
     public ResponseModel getAll(HashMap<String, Object> filters) {
@@ -60,6 +63,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         propertyList.forEach(x -> {
             try {
+                File imageFile = storageService.load(x.getId().toString()).getFile();
                 responseObj.add(
                         new PropertyListResponseModel(
                                 x.getId(),
@@ -67,7 +71,7 @@ public class PropertyServiceImpl implements PropertyService {
                                 x.getPropertyDetail().getDescription(),
                                 x.getPrice(),
                                 new AddressResponseModel(x.getAddress()).toString(),
-                                imageUtil.imageToBase64(),
+                                imageUtil.imageToBase64(imageFile),
                                 x.getPropertyOption().getType(),
                                 x.getPropertyDetail().getBed(),
                                 x.getPropertyDetail().getBath(),
@@ -129,7 +133,7 @@ public class PropertyServiceImpl implements PropertyService {
                     (property.getPropertyType() != null) ? property.getPropertyType().getName() : null,
                     property.getAddress(),
                     (property.getPropertyView() != null) ? property.getPropertyView().stream().count() : 0,
-                    imageUtil.imageToBase64(),
+                    imageUtil.imageToBase64(storageService.load(property.getId().toString()).getFile()),
                     property.getBuiltYear(),
                     property.getPropertyStatus(),
                     userService.hasToken() ? false : favoriteRepo.findByUsersAndProperties(userService.getLoggedInUser(), property) != null));

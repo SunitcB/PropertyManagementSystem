@@ -8,6 +8,7 @@ import com.miu.waafinalproject.model.responseDTO.PropertyListResponseModel;
 import com.miu.waafinalproject.repository.FavoriteRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.FavoriteService;
+import com.miu.waafinalproject.service.FileStorageService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.PropertyImageUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private ResponseModel responseModel;
     private final UserService userService;
     private final FavoriteRepo favoriteRepo;
-
+    private final FileStorageService storageService;
     private final PropertyRepo propertyRepo;
     private final PropertyImageUtil imageUtil;
 
@@ -46,7 +47,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                                         x.getProperties().getPropertyDetail().getDescription(),
                                         x.getProperties().getPrice(),
                                         new AddressResponseModel(x.getProperties().getAddress()).toString(),
-                                        imageUtil.imageToBase64(),
+                                        imageUtil.imageToBase64(storageService.load(x.getId().toString()).getFile()),
                                         x.getProperties().getPropertyOption().getType(),
                                         x.getProperties().getPropertyDetail().getBed(),
                                         x.getProperties().getPropertyDetail().getBath(),
@@ -67,13 +68,12 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseModel favorite(UUID id) {
         responseModel = new ResponseModel();
-        Favorite fav = favoriteRepo.findByUsersAndProperties_Id(userService.getLoggedInUser(),id);
-        if(fav !=null){
+        Favorite fav = favoriteRepo.findByUsersAndProperties_Id(userService.getLoggedInUser(), id);
+        if (fav != null) {
             favoriteRepo.deleteById(fav.getId());
             responseModel.setStatus(HttpStatus.OK);
             responseModel.setMessage("Property has been removed from favorite successfully.");
-        }
-        else{
+        } else {
             Favorite favorite = new Favorite();
             favorite.setUsers(userService.getLoggedInUser());
             favorite.setProperties(propertyRepo.findById(id).get());

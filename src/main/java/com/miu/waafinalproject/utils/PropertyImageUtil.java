@@ -14,9 +14,8 @@ import java.util.Base64;
 public class PropertyImageUtil {
     private final ServletContext context;
 
-    public String imageToBase64() throws IOException {
-        String absolutePath = context.getRealPath("resources/static");
-        byte[] fileContent = FileUtils.readFileToByteArray(new File("/Users/mannsu/Projects/WAAFinalProject/src/main/resources/static/img.jpg"));
+    public String imageToBase64(File file) throws IOException {
+        byte[] fileContent = FileUtils.readFileToByteArray(file);
         return Base64.getEncoder().encodeToString(fileContent);
     }
 }
