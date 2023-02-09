@@ -4,6 +4,7 @@ import com.miu.waafinalproject.domain.Property;
 import com.miu.waafinalproject.domain.PropertyApplication;
 import com.miu.waafinalproject.model.ResponseModel;
 import com.miu.waafinalproject.model.requestDTO.PropertyApplicationRequestModel;
+import com.miu.waafinalproject.model.responseDTO.PdfResponseModel;
 import com.miu.waafinalproject.model.responseDTO.PropertyApplicationResponseModel;
 import com.miu.waafinalproject.repository.PropertyApplicationRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -76,6 +78,20 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
         responseModel.setData(responseObj);
         responseModel.setStatus(HttpStatus.OK);
         return responseModel;
+    }
+
+    @Override
+    public PdfResponseModel getPdfResponseModel(long id) {
+        PdfResponseModel pdfModel = new PdfResponseModel();
+        PropertyApplication application = applicationRepo.findById(id).get();
+        pdfModel.setTax(7);
+        pdfModel.setPropertyDetail(application.getProperty().getPropertyDetail());
+        pdfModel.setCostPrice(application.getOfferPrice());
+        pdfModel.setContractDate(LocalDate.now());
+        pdfModel.setAddress(application.getProperty().getAddress());
+        pdfModel.setBuyerName(application.getProperty().getOwner().getUserFullName());
+        pdfModel.setSellerName(application.getUsers().getUserFullName());
+        return pdfModel;
     }
 
     @Override

@@ -163,6 +163,7 @@ public class PropertyServiceImpl implements PropertyService {
         property.setPropertyType(propertyTypeRepo.findByName(requestModel.getPropertyType()));
         property.setOwner(userService.getLoggedInUser());
         property.setPropertyStatus(requestModel.getPropertyStatus());
+        property.setIsActive(requestModel.getIsActive());
         propertyRepo.save(property);
         responseModel.setData(property.getId());
         responseModel.setStatus(HttpStatus.OK);

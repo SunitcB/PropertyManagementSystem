@@ -24,7 +24,7 @@ public class AdminServiceImpl implements AdminService {
 
         responseModel = new ResponseModel();
         Users userObj = usersRepo.findById(userId).get();
-        emailSenderUtil.sendSimpleEmail(userObj.getEmail(), "Owner Account Approved","Your request for registering the acc");
+
         if (userService.checkIfCurrentUserHasRole(UserRoles.ADMIN.toString())) {
 //            Users userObj = usersRepo.findById(userId).get();
             userObj.setIsActive(true);
