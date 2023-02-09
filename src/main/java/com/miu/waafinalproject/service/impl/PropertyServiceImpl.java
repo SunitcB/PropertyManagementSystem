@@ -211,8 +211,22 @@ public class PropertyServiceImpl implements PropertyService {
         } else {
             responseModel.setStatus(HttpStatus.OK);
             propertyRepo.deleteById(id);
-            responseModel.setMessage("Property has been deleted successfully.");
+            responseModel.setStatus(HttpStatus.OK);
         }
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel makeContingent(UUID id) {
+        responseModel = new ResponseModel();
+
+        Property propertyObj = propertyRepo.findById(id).get();
+        propertyObj.setPropertyStatus(PropertyStatus.CONTINGENT.toString());
+        propertyRepo.save(propertyObj);
+
+        responseModel.setStatus(HttpStatus.OK);
+        responseModel.setMessage("Property has been declared contingent");
+
         return responseModel;
     }
 }

@@ -71,4 +71,10 @@ public class PropertyController {
         responseModel = propertyService.delete(id);
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
+
+    @PatchMapping("/{id}/contingent")
+    public ResponseEntity<ResponseModel> makeContingent(@PathVariable UUID id){
+        responseModel = propertyService.makeContingent(id);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
 }

@@ -22,4 +22,5 @@ public interface PropertyService {
     ResponseModel update(UUID id, PropertyRequestModel requestModel);
 
     ResponseModel delete(UUID id);
+    ResponseModel makeContingent(UUID id);
 }
