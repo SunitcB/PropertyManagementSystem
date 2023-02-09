@@ -238,8 +238,8 @@ public class PropertyServiceImpl implements PropertyService {
 
         PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.ACCEPTED.toString());
         application.setStatus(PropertyApplicationStatus.CONTRACTED.toString());
-        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "Registration approved on SRNA Portal as a seller", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
-                "Congratulations! You are approved to be a certified real state seller from SRNA portal."+
+        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
+                "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+
                 "\n\n" +
                 "Yours truly,\n" +
                 "The SRNA team");
