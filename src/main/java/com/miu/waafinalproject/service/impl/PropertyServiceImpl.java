@@ -53,7 +53,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
         List<Property> propertyList = new ArrayList<>();
         if (filters == null) {
-            propertyRepo.findAll().forEach(propertyList::add);
+            propertyRepo.findAllByIsActive(true).forEach(propertyList::add);
         } else {
             propertyList = filterProperties(filters);
         }
@@ -92,6 +92,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         List<Predicate> predicateList = new ArrayList<>();
         Root<Property> property = criteriaQuery.from(Property.class);
+        predicateList.add(criteriaBuilder.equal(property.get("isActive"), true));
         if (filters.get("price") != null) {
             predicateList.add(criteriaBuilder.equal(property.get("price"), filters.get("price")));
         }
@@ -158,6 +159,22 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepo.save(property);
         responseModel.setStatus(HttpStatus.OK);
         responseModel.setMessage("Property has been saved successfully.");
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel showHideProperty(UUID propertyId, String action) {
+        responseModel = new ResponseModel();
+        Property property = propertyRepo.findById(propertyId).get();
+        if (action == "show") {
+            responseModel.setMessage("Property has been shown.");
+            property.setIsActive(true);
+        } else {
+            property.setIsActive(false);
+            responseModel.setMessage("Property has been hidden.");
+        }
+        propertyRepo.save(property);
+        responseModel.setStatus(HttpStatus.OK);
         return responseModel;
     }
 

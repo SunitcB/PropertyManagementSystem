@@ -20,4 +20,5 @@ public class OwnerPropertyListResponseModel {
     Integer offerCount;
     Integer viewCount;
     String propertStatus;
+    Boolean isActive;
 }

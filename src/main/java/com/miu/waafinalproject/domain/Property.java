@@ -50,4 +50,5 @@ public class Property {
     @ManyToOne
     @JsonBackReference
     Users owner;
+    Boolean isActive;
 }

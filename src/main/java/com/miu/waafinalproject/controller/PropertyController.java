@@ -60,6 +60,12 @@ public class PropertyController {
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseModel> showHideProperty(@PathVariable UUID id, @RequestParam String action){
+        responseModel = propertyService.showHideProperty(id, action);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseModel> deleteProperty(@PathVariable UUID id) {
         responseModel = propertyService.delete(id);

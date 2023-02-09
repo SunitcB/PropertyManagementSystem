@@ -10,9 +10,16 @@ import java.util.UUID;
 
 public interface PropertyService {
     ResponseModel getAll(HashMap<String, Object> filters);
+
     List<Property> filterProperties(HashMap<String, Object> filters);
+
     ResponseModel getById(UUID id);
+
     ResponseModel save(PropertyRequestModel requestModel);
+
+    ResponseModel showHideProperty(UUID propertyId, String action);
+
     ResponseModel update(UUID id, PropertyRequestModel requestModel);
+
     ResponseModel delete(UUID id);
 }

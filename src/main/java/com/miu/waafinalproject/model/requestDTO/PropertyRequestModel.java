@@ -26,4 +26,5 @@ public class PropertyRequestModel {
     Long ownerId;
     Double price;
     String propertyStatus = PropertyStatus.AVAILABLE.toString();
+    Boolean isActive = true;
 }
