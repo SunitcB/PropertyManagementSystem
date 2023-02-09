@@ -14,4 +14,6 @@ public class UserResponseModel {
     String middleName;
     String username;
     Role role;
+    Boolean isActive;
+
 }

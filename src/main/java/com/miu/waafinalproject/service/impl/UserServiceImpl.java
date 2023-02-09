@@ -101,7 +101,8 @@ public class UserServiceImpl implements UserService {
                                 x.getLastName(),
                                 x.getMiddleName(),
                                 x.getUsername(),
-                                x.getRoles().get(0)
+                                x.getRoles().get(0),
+                                x.getIsActive()
                         ));
             }
         });
@@ -127,7 +128,8 @@ public class UserServiceImpl implements UserService {
                 user.getLastName(),
                 user.getMiddleName(),
                 user.getUsername(),
-                user.getRoles().get(0)
+                user.getRoles().get(0),
+                user.getIsActive()
                 ));
         return responseModel;
     }
