@@ -10,6 +10,7 @@ import com.miu.waafinalproject.repository.PropertyApplicationRepo;
 import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.PropertyApplicationService;
 import com.miu.waafinalproject.service.UserService;
+import com.miu.waafinalproject.utils.EmailSenderUtil;
 import com.miu.waafinalproject.utils.enums.ApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
@@ -31,6 +32,7 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
     private final PropertyApplicationRepo applicationRepo;
     private final PropertyRepo propertyRepo;
     private final UserService userService;
+    private final EmailSenderUtil emailSenderUtil;
 
     @Override
     public ResponseModel getAllOffersToProperty(UUID propertyId) {
@@ -112,6 +114,11 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
             application.setOfferPrice(applicationModel.getOfferPrice());
             application.setUsers(userService.getLoggedInUser());
             applicationRepo.save(application);
+            emailSenderUtil.sendSimpleEmail(application.getProperty().getOwner().getEmail(), "Your property has a new offer", "Dear " + application.getProperty().getOwner().getFirstName() + ",\n" +
+                    "You're property listed on SRNA portal has a new offer. PLease login to the portal to view the details."+
+                    "\n" +
+                    "Yours truly,\n" +
+                    "The SRNA team");
             responseModel.setMessage("Property offer application has been submitted.");
         }
 
@@ -170,6 +177,11 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
                     applicationRepo.save(restOfApplication);
                 }
             }
+            emailSenderUtil.sendSimpleEmail(targetProperty.getOwner().getEmail(), "Your property has a new offer", "Dear " + targetProperty.getOwner().getFirstName() + ",\n" +
+                    "You're property listed on SRNA portal has a new offer. PLease login to the portal to view the details."+
+                    "\n" +
+                    "Yours truly,\n" +
+                    "The SRNA team");
         } else {
             responseModel.setMessage("Property offer has been rejected.");
             targetProperty.setPropertyStatus(PropertyStatus.AVAILABLE.toString());
