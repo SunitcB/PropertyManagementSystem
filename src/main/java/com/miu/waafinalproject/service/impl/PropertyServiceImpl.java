@@ -161,6 +161,7 @@ public class PropertyServiceImpl implements PropertyService {
         property.setOwner(userService.getLoggedInUser());
         property.setPropertyStatus(requestModel.getPropertyStatus());
         propertyRepo.save(property);
+        responseModel.setData(property.getId());
         responseModel.setStatus(HttpStatus.OK);
         responseModel.setMessage("Property has been saved successfully.");
         return responseModel;
@@ -200,6 +201,7 @@ public class PropertyServiceImpl implements PropertyService {
         property.setPropertyType(propertyTypeRepo.findByName(requestModel.getPropertyType()));
         property.setPropertyStatus(requestModel.getPropertyStatus());
         propertyRepo.save(property);
+        responseModel.setData(id);
         responseModel.setMessage("Property has been updated successfully.");
         return responseModel;
     }
