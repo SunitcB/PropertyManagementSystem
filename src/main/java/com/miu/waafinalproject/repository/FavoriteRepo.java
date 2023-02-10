@@ -12,9 +12,8 @@ import java.util.UUID;
 
 public interface FavoriteRepo extends CrudRepository<Favorite, Long> {
     Favorite findByUsersAndProperties(Users users, Property property);
-
     Favorite findByUsersAndProperties_Id(Users users, UUID id);
-
+    List<Favorite> findAllByUsers(Users users);
     @Query("Select pf.properties.title, count(pf) from Property p join p.favorites pf where p.owner.id = :userId group by pf")
     List<FavoriteCountChartData> getFavouriteChartData(long userId);
 }
