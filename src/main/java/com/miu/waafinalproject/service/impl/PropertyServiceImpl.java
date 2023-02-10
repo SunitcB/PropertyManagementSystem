@@ -257,7 +257,7 @@ public class PropertyServiceImpl implements PropertyService {
         propertyObj.setPropertyStatus(PropertyStatus.AVAILABLE.toString());
         propertyRepo.save(propertyObj);
 
-        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.APPROVED.toString());
+        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.CONTRACTED.toString());
         application.setStatus(PropertyApplicationStatus.CANCELLED.toString());
         emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
                 "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+
@@ -266,7 +266,7 @@ public class PropertyServiceImpl implements PropertyService {
                 "The SRNA team");
         applicationRepo.save(application);
         responseModel.setStatus(HttpStatus.OK);
-        responseModel.setMessage("Property has been declared contingent");
+        responseModel.setMessage("Property contingency has been cancelled");
 
         return responseModel;
     }
