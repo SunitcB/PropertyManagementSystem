@@ -61,7 +61,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
         List<Property> propertyList = new ArrayList<>();
         if (filters == null) {
-            propertyRepo.findAllByIsActive(true).forEach(propertyList::add);
+            propertyRepo.findAllByIsActiveAndOwner_IsActive(true, true).forEach(propertyList::add);
         } else {
             propertyList = filterProperties(filters);
         }
@@ -237,6 +237,28 @@ public class PropertyServiceImpl implements PropertyService {
 
         PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.APPROVED.toString());
         application.setStatus(PropertyApplicationStatus.CONTRACTED.toString());
+        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
+                "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+
+                "\n\n" +
+                "Yours truly,\n" +
+                "The SRNA team");
+        applicationRepo.save(application);
+        responseModel.setStatus(HttpStatus.OK);
+        responseModel.setMessage("Property has been declared contingent");
+
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel cancelContingent(UUID id) {
+        responseModel = new ResponseModel();
+
+        Property propertyObj = propertyRepo.findById(id).get();
+        propertyObj.setPropertyStatus(PropertyStatus.AVAILABLE.toString());
+        propertyRepo.save(propertyObj);
+
+        PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.APPROVED.toString());
+        application.setStatus(PropertyApplicationStatus.CANCELLED.toString());
         emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
                 "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+
                 "\n\n" +

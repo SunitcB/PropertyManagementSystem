@@ -11,7 +11,6 @@ import com.miu.waafinalproject.repository.PropertyRepo;
 import com.miu.waafinalproject.service.PropertyApplicationService;
 import com.miu.waafinalproject.service.UserService;
 import com.miu.waafinalproject.utils.EmailSenderUtil;
-import com.miu.waafinalproject.utils.enums.ApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyApplicationStatus;
 import com.miu.waafinalproject.utils.enums.PropertyStatus;
 import lombok.RequiredArgsConstructor;
@@ -167,14 +166,14 @@ public class PropertyApplicationServiceImpl implements PropertyApplicationServic
         applicationObj.setStatus(action);
         applicationRepo.save(applicationObj);
 
-        if (action.equals(ApplicationStatus.APPROVED.toString())) {
+        if (action.equals(PropertyApplicationStatus.APPROVED.toString())) {
             responseModel.setMessage("Property offer has been accepted.");
             targetProperty.setPropertyStatus(PropertyStatus.PENDING.toString());
             propertyRepo.save(targetProperty);
 
             for (PropertyApplication restOfApplication : applicationRepo.findAllByProperty_Id(targetProperty.getId())) {
                 if (restOfApplication.getId() != id) {
-                    restOfApplication.setStatus(ApplicationStatus.REJECTED.toString());
+                    restOfApplication.setStatus(PropertyApplicationStatus.REJECTED.toString());
                     applicationRepo.save(restOfApplication);
                 }
             }

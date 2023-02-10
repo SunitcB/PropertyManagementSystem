@@ -4,5 +4,6 @@ public enum PropertyApplicationStatus {
     PENDING,
     APPROVED,
     REJECTED,
-    CONTRACTED
+    CONTRACTED,
+    CANCELLED
 }

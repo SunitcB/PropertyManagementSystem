@@ -82,6 +82,12 @@ public class PropertyController {
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
+    @PatchMapping("{id}/cancelContingent")
+    public ResponseEntity<ResponseModel> cancelContingent(@PathVariable UUID id){
+        responseModel = propertyService.cancelContingent(id);
+        return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
+    }
+
     @PostMapping("/propertyFile")
     public ResponseEntity<ResponseModel> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam String propertyId) {
         responseModel = storageService.save(file, propertyId);
