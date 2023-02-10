@@ -259,8 +259,8 @@ public class PropertyServiceImpl implements PropertyService {
 
         PropertyApplication application = applicationRepo.findByProperty_IdAndStatus(id,PropertyApplicationStatus.CONTRACTED.toString());
         application.setStatus(PropertyApplicationStatus.CANCELLED.toString());
-        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property has been set as contingent", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
-                "Congratulations! You are the new owner of a property. Please login to SRNA portal to see the details."+
+        emailSenderUtil.sendSimpleEmail(application.getUsers().getEmail(), "The property contract has been cancelled", "Dear " + application.getUsers().getFirstName() + ",\n\n" +
+                "Your contract for a property has been cancelled. Please contact the owner for inquiries."+
                 "\n\n" +
                 "Yours truly,\n" +
                 "The SRNA team");
