@@ -30,7 +30,7 @@ spring:
   application:
     name: property-management-system
   datasource:
-    password: 'guest'
+    password: 'Jersey@2023'
     url: jdbc:mysql://localhost:3306/manage_property
     username: root
   jpa:
