@@ -31,8 +31,8 @@ spring:
     name: property-management-system
   datasource:
 #    password: 'Jersey@2023'
-    password: 'guest'
-    url: jdbc:mysql://localhost:3306/manage_property
+    password: 'guest123'
+    url: jdbc:mysql://exciting_allen:3306/manage_property
     username: root
   jpa:
     hibernate:
