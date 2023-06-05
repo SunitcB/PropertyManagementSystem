@@ -37,7 +37,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         responseModel = new ResponseModel();
         List<PropertyListResponseModel> responseObj = new ArrayList<>();
 
-        favoriteRepo.findAllByUsers(userService.getLoggedInUser()).forEach(x -> {
+        favoriteRepo.findAllByUsers(userService.getLoggedInUser() ).forEach(x -> {
             try {
                 responseObj.add(
                         new FavoriteListResponseModel(
