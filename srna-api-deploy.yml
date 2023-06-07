@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srna-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: srna-api
+  template:
+    metadata:
+      labels:
+        app: srna-api
+    spec:
+      containers:
+        - name: srna-api
+          image: sunitcb/srna-api:latest
+          ports:
+            - containerPort: 8090
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-service:3306/manage_property
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: 'Jersey@2023'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: srna-api
+spec:
+  selector:
+    app: srna-api
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090
