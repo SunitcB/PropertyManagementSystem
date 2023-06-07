@@ -17,6 +17,7 @@ public class DashboardController {
     @GetMapping("/admin")
     public ResponseEntity<ResponseModel> getAdminData() {
         responseModel = dashboardService.getAdminDashboardChartData();
+
         return ResponseEntity.status(responseModel.getStatus()).body(responseModel);
     }
 
